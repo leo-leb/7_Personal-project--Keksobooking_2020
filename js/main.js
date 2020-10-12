@@ -16,13 +16,33 @@ const newItemPin = pinTemplate.querySelector(`.map__pin`);
 const map = document.querySelector(`.map`);
 map.classList.remove(`map--faded`);
 
+/**
+ * Получаем индекс случайного элемента исходного массива.
+ * @param {array} array - Исходный массив.
+ */
+
 const randomValue = function (array) {
   return Math.ceil(Math.random() * array.length);
 };
 
+/**
+ * Получаем случайный элемент исходного массива.
+ * @param {array} array - Исходный массив.
+ */
+
 const randomParameter = function (array) {
   return array[Math.floor(Math.random() * array.length)];
 };
+
+/**
+ * Создаем массив случайной длины из произвольных объектов исходного массива.
+ * @param {array} array - Исходный массив.
+ * @param {array} temporaryArray - Массив случайной длины.
+ * @param {string} someValue - Случайное элемент исходного массива.
+ * Количество элементов создаваемого массива ограничено случайным числом, меньшим чем длина исходного массива.
+ * Каждый случайный элемент проверяется на наличие аналогичного в созданном случайном массива на каждой итерации.
+ * Добавление случайного элемента выполняется только в случае отсутствия аналогичного элемента в случайном массиве.
+ */
 
 const randomArray = function (array) {
   let temporaryArray = [];
@@ -34,6 +54,11 @@ const randomArray = function (array) {
   }
   return temporaryArray;
 };
+
+/**
+ * Создаем массив случайных объектов.
+ * @param {array} array - Массив случайных объектов.
+ */
 
 const createLib = function () {
   let array = [];
@@ -63,10 +88,18 @@ const createLib = function () {
   return array;
 };
 
+/**
+ * Копируем template и добавляем в разметку - в блок "map__pins".
+ */
+
 const fillMap = function () {
   let mapPin = newItemPin.cloneNode(true);
   mapPins.appendChild(mapPin);
 };
+
+/**
+ * Заполняем каждый из скопированных элементов позиционирующими стилями и заполняем адрес / подпись для изображения.
+ */
 
 const createPins = function () {
   for (let i = 0; i < library.length; i++) {
