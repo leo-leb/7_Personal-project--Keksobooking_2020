@@ -17,19 +17,19 @@ const map = document.querySelector(`.map`);
 map.classList.remove(`map--faded`);
 
 /**
- * Получаем индекс случайного элемента исходного массива.
+ * Возвращает индекс случайного элемента массива.
  * @param {array} array - Исходный массив.
+ * @return {number} - Индекс.
  */
-
 const randomValue = function (array) {
   return Math.ceil(Math.random() * array.length);
 };
 
 /**
- * Получаем случайный элемент исходного массива.
+ * Возвращает случайный элемент массива.
  * @param {array} array - Исходный массив.
+ * @return {string} - Случайный элемент исходного массива.
  */
-
 const randomParameter = function (array) {
   return array[Math.floor(Math.random() * array.length)];
 };
@@ -37,13 +37,8 @@ const randomParameter = function (array) {
 /**
  * Создаем массив случайной длины из произвольных объектов исходного массива.
  * @param {array} array - Исходный массив.
- * @param {array} temporaryArray - Массив случайной длины.
- * @param {string} someValue - Случайное элемент исходного массива.
- * Количество элементов создаваемого массива ограничено случайным числом, меньшим чем длина исходного массива.
- * Каждый случайный элемент проверяется на наличие аналогичного в созданном случайном массива на каждой итерации.
- * Добавление случайного элемента выполняется только в случае отсутствия аналогичного элемента в случайном массиве.
+ * @return {array} - Массив случайной длины.
  */
-
 const randomArray = function (array) {
   let temporaryArray = [];
   for (let i = 0; i < randomValue(array); i++) {
@@ -57,9 +52,8 @@ const randomArray = function (array) {
 
 /**
  * Создаем массив случайных объектов.
- * @param {array} array - Массив случайных объектов.
+ * @return {array} - Массив случайных объектов.
  */
-
 const createLib = function () {
   let array = [];
   for (let i = 0; i <= LIB_SIZE; i++) {
@@ -91,25 +85,24 @@ const createLib = function () {
 /**
  * Копируем template и добавляем в разметку - в блок "map__pins".
  */
-
 const fillMap = function () {
   let mapPin = newItemPin.cloneNode(true);
   mapPins.appendChild(mapPin);
 };
 
 /**
- * Заполняем каждый из скопированных элементов позиционирующими стилями и заполняем адрес / подпись для изображения.
+ * Используя данные исходного массива и функцию добавления в разметку новых объектов, наполняем элементы стилями и пр. инфо.
+ * @param {array} array - Исходный массив.
  */
-
-const createPins = function () {
-  for (let i = 0; i < library.length; i++) {
-    newItemPin.style = `left: ${library[i].location.x + OFFSET_X}px; top: ${library[i].location.y + OFFSET_Y}px`;
+const createPins = function (array) {
+  for (let i = 0; i < array.length; i++) {
+    newItemPin.style = `left: ${array[i].location.x + OFFSET_X}px; top: ${array[i].location.y + OFFSET_Y}px`;
     let picture = newItemPin.querySelector(`img`);
-    picture.src = `${library[i].author.avatar}`;
+    picture.src = `${array[i].author.avatar}`;
     picture.alt = `заголовок объявления`;
     fillMap();
   }
 };
 
 let library = createLib();
-createPins();
+createPins(library);
