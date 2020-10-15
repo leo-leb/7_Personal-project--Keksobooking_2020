@@ -12,9 +12,71 @@ let libPhotos = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o
 const mapPins = document.querySelector(`.map__pins`);
 const pinTemplate = document.querySelector(`#pin`).content;
 const newItemPin = pinTemplate.querySelector(`.map__pin`);
+const mainPin = mapPins.querySelector(`.map__pin--main`);
+const formParent = document.querySelector(`.ad-form`);
+const formChilds = formParent.querySelectorAll(`fieldset`);
 
 const map = document.querySelector(`.map`);
-map.classList.remove(`map--faded`);
+const mapFilterParent = map.querySelector(`.map__filters`);
+const mapFilterChilds = mapFilterParent.children;
+
+/**
+ * Присваивает неактивное состояние всем дочерним элементам исходного массива.
+ * @param {array} array - Исходный массив.
+ */
+const setPassiveCondition = function (array) {
+  for (let i = 0; i < array.length; i++) {
+    array[i].setAttribute(`disabled`, true);
+  }
+};
+
+/**
+ * Присваивает активное состояние всем дочерним элементам исходного массива.
+ * @param {array} array - Исходный массив.
+ */
+const setActiveCondition = function (array) {
+  for (let i = 0; i < array.length; i++) {
+    array[i].removeAttribute(`disabled`, true);
+  }
+};
+
+/**
+ * Деактивация страницы.
+ */
+const setPassivePage = function () {
+  setPassiveCondition(mapFilterChilds);
+  setPassiveCondition(formChilds);
+};
+
+/**
+ * Активация страницы.
+ */
+const setActivePage = function () {
+  map.classList.remove(`map--faded`);
+  formParent.classList.remove(`ad-form--disabled`);
+  setActiveCondition(mapFilterChilds);
+  setActiveCondition(formChilds);
+};
+
+setPassivePage();
+
+/**
+ * Активация страницы по клику левой клавиши мыши.
+ */
+mainPin.addEventListener(`mousedown`, function (evt) {
+  if (evt.which === 1) {
+    setActivePage();
+  }
+});
+
+/**
+ * Активация страницы по нажатию Enter в фокусе.
+ */
+mainPin.addEventListener(`keydown`, function (evt) {
+  if (evt.keyCode === 13) {
+    setActivePage();
+  }
+});
 
 /**
  * Возвращает индекс случайного элемента массива.
@@ -104,5 +166,5 @@ const createPins = function (array) {
   }
 };
 
-let library = createLib();
-createPins(library);
+// let library = createLib();
+// createPins(library);
