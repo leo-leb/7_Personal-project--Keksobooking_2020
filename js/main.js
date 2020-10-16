@@ -11,6 +11,12 @@ let libType = [`palace`, `flat`, `house`, `bungalow`];
 let libCheck = [`12:00`, `13:00`, `14:00`];
 let libFeatures = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
 let libPhotos = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0.github.io/assets/images/tokyo/hotel2.jpg`, `http://o0.github.io/assets/images/tokyo/hotel3.jpg`];
+let livingRules = {
+  '1 комната': `для 1 гостя`,
+  '2 комнаты': [`для 1 гостя`, `для 2 гостей`],
+  '3 комнаты': [`для 1 гостя`, `для 2 гостей`, `для 3 гостей`],
+  '100 комнат': `не для гостей`,
+};
 
 const mapPins = document.querySelector(`.map__pins`);
 const pinTemplate = document.querySelector(`#pin`).content;
@@ -18,7 +24,9 @@ const newItemPin = pinTemplate.querySelector(`.map__pin`);
 const mainPin = mapPins.querySelector(`.map__pin--main`);
 const formParent = document.querySelector(`.ad-form`);
 const formChilds = formParent.querySelectorAll(`fieldset`);
-const formAddress = document.querySelector(`#address`);
+const formAddress = formParent.querySelector(`#address`);
+const formRoom = formParent.querySelector(`#room_number`);
+const formCapacity = formParent.querySelector(`#capacity`);
 
 const map = document.querySelector(`.map`);
 const mapFilterParent = map.querySelector(`.map__filters`);
@@ -207,6 +215,76 @@ const createPins = function (array) {
     fillMap();
   }
 };
+
+// ЗАВИСИМОСТЬ КОМНАТ ОТ КОЛИЧЕСТВА МЕСТ
+
+// const setGuestsLimit = function () {
+//   if (formRoom.options[formRoom.selectedIndex].value === `1`) {
+//     for (let element of formCapacity.options) {
+//       if (element.textContent === livingRules[`1 комната`]) {
+//         formCapacity.setCustomValidity(``);
+//       } else {
+//         formCapacity.setCustomValidity(`Недоступно`);
+//       }
+//     }
+//   }
+// };
+
+// const setGuestsLimit = function () {
+//   if (formRoom.options[formRoom.selectedIndex].value === `1`) {
+//     if (formCapacity.options[formCapacity.selectedIndex].textContent === livingRules[`1 комната`]) {
+//       formCapacity.setCustomValidity(``);
+//     } else {
+//       formCapacity.setCustomValidity(`Недоступно`);
+//     }
+//   }
+// };
+
+// setGuestsLimit();
+
+formCapacity.addEventListener(`change`, function () {
+  if (formRoom.options[formRoom.selectedIndex].value === `1`) {
+    if (formCapacity.options[formCapacity.selectedIndex].textContent === livingRules[`1 комната`]) {
+      formCapacity.setCustomValidity(``);
+    } else {
+      formCapacity.setCustomValidity(`Недоступно`);
+    }
+  } else if (formRoom.options[formRoom.selectedIndex].value === `2`) {
+    if (livingRules[`2 комнаты`].includes(formCapacity.options[formCapacity.selectedIndex].textContent)) {
+      formCapacity.setCustomValidity(``);
+    } else {
+      formCapacity.setCustomValidity(`Недоступно`);
+    }
+  } else if (formRoom.options[formRoom.selectedIndex].value === `3`) {
+    if (livingRules[`3 комнаты`].includes(formCapacity.options[formCapacity.selectedIndex].textContent)) {
+      formCapacity.setCustomValidity(``);
+    } else {
+      formCapacity.setCustomValidity(`Недоступно`);
+    }
+  } else {
+    if (formCapacity.options[formCapacity.selectedIndex].textContent === livingRules[`100 комнат`]) {
+      formCapacity.setCustomValidity(``);
+    } else {
+      formCapacity.setCustomValidity(`Недоступно`);
+    }
+  }
+});
+
+// setGuestsLimit();
+
+// const setGuestsLimit = function () {
+//   for (let element of formRoom.options) {
+//     if (element.selected) {
+//       console.log(element);
+//     }
+//   }
+// };
+
+// setGuestsLimit();
+
+// formRoom.options[2].setCustomValidity(`РУКИ УБЕРИ!!!`);
+
+// setGuestsLimit();
 
 // let library = createLib();
 // createPins(library);
