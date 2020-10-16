@@ -216,75 +216,46 @@ const createPins = function (array) {
   }
 };
 
-// ЗАВИСИМОСТЬ КОМНАТ ОТ КОЛИЧЕСТВА МЕСТ
-
-// const setGuestsLimit = function () {
-//   if (formRoom.options[formRoom.selectedIndex].value === `1`) {
-//     for (let element of formCapacity.options) {
-//       if (element.textContent === livingRules[`1 комната`]) {
-//         formCapacity.setCustomValidity(``);
-//       } else {
-//         formCapacity.setCustomValidity(`Недоступно`);
-//       }
-//     }
-//   }
-// };
-
-// const setGuestsLimit = function () {
-//   if (formRoom.options[formRoom.selectedIndex].value === `1`) {
-//     if (formCapacity.options[formCapacity.selectedIndex].textContent === livingRules[`1 комната`]) {
-//       formCapacity.setCustomValidity(``);
-//     } else {
-//       formCapacity.setCustomValidity(`Недоступно`);
-//     }
-//   }
-// };
-
-// setGuestsLimit();
-
-formCapacity.addEventListener(`change`, function () {
-  if (formRoom.options[formRoom.selectedIndex].value === `1`) {
-    if (formCapacity.options[formCapacity.selectedIndex].textContent === livingRules[`1 комната`]) {
+/**
+ * Ограничиваем допустимое количество мест в соответствии с количеством комнат жилья.
+ */
+const setGuestsLimit = function () {
+  let formRoomValue = formRoom.options[formRoom.selectedIndex].value;
+  let formCapacityContent = formCapacity.options[formCapacity.selectedIndex].textContent;
+  if (formRoomValue === `1`) {
+    if (formCapacityContent === livingRules[`1 комната`]) {
       formCapacity.setCustomValidity(``);
     } else {
       formCapacity.setCustomValidity(`Недоступно`);
     }
-  } else if (formRoom.options[formRoom.selectedIndex].value === `2`) {
-    if (livingRules[`2 комнаты`].includes(formCapacity.options[formCapacity.selectedIndex].textContent)) {
+  } else if (formRoomValue === `2`) {
+    if (livingRules[`2 комнаты`].includes(formCapacityContent)) {
       formCapacity.setCustomValidity(``);
     } else {
       formCapacity.setCustomValidity(`Недоступно`);
     }
-  } else if (formRoom.options[formRoom.selectedIndex].value === `3`) {
-    if (livingRules[`3 комнаты`].includes(formCapacity.options[formCapacity.selectedIndex].textContent)) {
+  } else if (formRoomValue === `3`) {
+    if (livingRules[`3 комнаты`].includes(formCapacityContent)) {
       formCapacity.setCustomValidity(``);
     } else {
       formCapacity.setCustomValidity(`Недоступно`);
     }
   } else {
-    if (formCapacity.options[formCapacity.selectedIndex].textContent === livingRules[`100 комнат`]) {
+    if (formCapacityContent === livingRules[`100 комнат`]) {
       formCapacity.setCustomValidity(``);
     } else {
       formCapacity.setCustomValidity(`Недоступно`);
     }
   }
+};
+
+formCapacity.addEventListener(`change`, function () {
+  setGuestsLimit();
 });
 
-// setGuestsLimit();
-
-// const setGuestsLimit = function () {
-//   for (let element of formRoom.options) {
-//     if (element.selected) {
-//       console.log(element);
-//     }
-//   }
-// };
-
-// setGuestsLimit();
-
-// formRoom.options[2].setCustomValidity(`РУКИ УБЕРИ!!!`);
-
-// setGuestsLimit();
+document.addEventListener(`DOMContentLoaded`, function () {
+  setGuestsLimit();
+});
 
 // let library = createLib();
 // createPins(library);
