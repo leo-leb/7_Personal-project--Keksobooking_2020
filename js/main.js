@@ -11,11 +11,17 @@ let libType = [`palace`, `flat`, `house`, `bungalow`];
 let libCheck = [`12:00`, `13:00`, `14:00`];
 let libFeatures = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
 let libPhotos = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0.github.io/assets/images/tokyo/hotel2.jpg`, `http://o0.github.io/assets/images/tokyo/hotel3.jpg`];
+// let livingRules = {
+//   '1 комната': `для 1 гостя`,
+//   '2 комнаты': [`для 1 гостя`, `для 2 гостей`],
+//   '3 комнаты': [`для 1 гостя`, `для 2 гостей`, `для 3 гостей`],
+//   '100 комнат': `не для гостей`,
+// };
 let livingRules = {
-  '1 комната': `для 1 гостя`,
-  '2 комнаты': [`для 1 гостя`, `для 2 гостей`],
-  '3 комнаты': [`для 1 гостя`, `для 2 гостей`, `для 3 гостей`],
-  '100 комнат': `не для гостей`,
+  '1': `1`,
+  '2': [`1`, `2`],
+  '3': [`1`, `2`, `3`],
+  '100': `0`,
 };
 
 const mapPins = document.querySelector(`.map__pins`);
@@ -23,14 +29,14 @@ const pinTemplate = document.querySelector(`#pin`).content;
 const newItemPin = pinTemplate.querySelector(`.map__pin`);
 const mainPin = mapPins.querySelector(`.map__pin--main`);
 const formParent = document.querySelector(`.ad-form`);
-const formChilds = formParent.querySelectorAll(`fieldset`);
+const formChilds = formParent.querySelectorAll(`fieldset`); // ---
 const formAddress = formParent.querySelector(`#address`);
 const formRoom = formParent.querySelector(`#room_number`);
 const formCapacity = formParent.querySelector(`#capacity`);
 
 const map = document.querySelector(`.map`);
 const mapFilterParent = map.querySelector(`.map__filters`);
-const mapFilterChilds = mapFilterParent.children;
+const mapFilterChilds = mapFilterParent.querySelectorAll(`.map__filter`);
 
 /**
  * Возвращает массив расчитанных координат исследуемого объекта для стартовой страницы.
@@ -65,31 +71,33 @@ const setPosition = function (object, objectPos) {
 };
 
 /**
- * Присваивает неактивное состояние всем дочерним элементам исходного массива.
- * @param {array} array - Исходный массив.
- */
-const setPassiveCondition = function (array) {
-  for (let i = 0; i < array.length; i++) {
-    array[i].setAttribute(`disabled`, true);
-  }
-};
-
-/**
  * Присваивает активное состояние всем дочерним элементам исходного массива.
  * @param {array} array - Исходный массив.
  */
-const setActiveCondition = function (array) {
-  for (let i = 0; i < array.length; i++) {
-    array[i].removeAttribute(`disabled`, true);
-  }
-};
+// const setActiveCondition = function (array) {
+//   for (let i = 0; i < array.length; i++) {
+//     array[i].removeAttribute(`disabled`, true);
+//   }
+// };
+
+/**
+ * Присваивает неактивное состояние всем дочерним элементам исходного массива.
+ * @param {array} array - Исходный массив.
+ */
+// const setPassiveCondition = function (array) {
+//   for (let i = 0; i < array.length; i++) {
+//     array[i].setAttribute(`disabled`, true);
+//   }
+// };
 
 /**
  * Деактивация страницы.
  */
 const setPassivePage = function () {
-  setPassiveCondition(mapFilterChilds);
-  setPassiveCondition(formChilds);
+  // setPassiveCondition(mapFilterChilds);
+  mapFilterChilds.forEach(function (element) {element.setAttribute('disabled', true)});
+  // setPassiveCondition(formChilds);
+  formChilds.forEach(function (element) {element.setAttribute('disabled', true)});
   const mainPinPos = calcPositionStart(PIN_X, PIN_Y_START);
   setPosition(mainPin, mainPinPos);
   formAddress.value = mainPinPos[0] + `, ` + mainPinPos[1];
@@ -101,8 +109,10 @@ const setPassivePage = function () {
 const setActivePage = function () {
   map.classList.remove(`map--faded`);
   formParent.classList.remove(`ad-form--disabled`);
-  setActiveCondition(mapFilterChilds);
-  setActiveCondition(formChilds);
+  // setActiveCondition(mapFilterChilds);
+  mapFilterChilds.forEach(function (element) {element.removeAttribute('disabled', true)});
+  // setActiveCondition(formChilds);
+  formChilds.forEach(function (element) {element.removeAttribute('disabled', true)});
   const mainPinPos = calcPositionActive(PIN_X, PIN_Y_ACTIVE);
   setPosition(mainPin, mainPinPos);
   formAddress.value = mainPinPos[0] + `, ` + mainPinPos[1];
@@ -220,40 +230,16 @@ const createPins = function (array) {
  * Ограничиваем допустимое количество мест в соответствии с количеством комнат жилья.
  */
 const setGuestsLimit = function () {
-  let formRoomValue = formRoom.options[formRoom.selectedIndex].value;
-  let formCapacityContent = formCapacity.options[formCapacity.selectedIndex].textContent;
-  if (formRoomValue === `1`) {
-    if (formCapacityContent === livingRules[`1 комната`]) {
-      formCapacity.setCustomValidity(``);
-    } else {
-      formCapacity.setCustomValidity(`Недоступно`);
-    }
-  } else if (formRoomValue === `2`) {
-    if (livingRules[`2 комнаты`].includes(formCapacityContent)) {
-      formCapacity.setCustomValidity(``);
-    } else {
-      formCapacity.setCustomValidity(`Недоступно`);
-    }
-  } else if (formRoomValue === `3`) {
-    if (livingRules[`3 комнаты`].includes(formCapacityContent)) {
-      formCapacity.setCustomValidity(``);
-    } else {
-      formCapacity.setCustomValidity(`Недоступно`);
-    }
+  let selectedRoom = formRoom[formRoom.selectedIndex].value;
+  let selectedCapacity = formCapacity[formCapacity.selectedIndex].value;
+  if (livingRules[selectedRoom].includes(selectedCapacity)) {
+    formCapacity.setCustomValidity(``);
   } else {
-    if (formCapacityContent === livingRules[`100 комнат`]) {
-      formCapacity.setCustomValidity(``);
-    } else {
-      formCapacity.setCustomValidity(`Недоступно`);
-    }
+    formCapacity.setCustomValidity(`Недоступно`);
   }
 };
 
 formCapacity.addEventListener(`change`, function () {
-  setGuestsLimit();
-});
-
-document.addEventListener(`DOMContentLoaded`, function () {
   setGuestsLimit();
 });
 
