@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-  const LIB_SIZE = 7;
+  const LIB_SIZE = 8;
 
   const OFFSET_X = 200;
   const OFFSET_Y = 400;
@@ -11,7 +11,6 @@
   let libPhotos = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0.github.io/assets/images/tokyo/hotel2.jpg`, `http://o0.github.io/assets/images/tokyo/hotel3.jpg`];
 
   const mapPins = document.querySelector(`.map__pins`);
-  window.mainPin = mapPins.querySelector(`.map__pin--main`);
   const pinTemplate = document.querySelector(`#pin`).content;
   const newItemPin = pinTemplate.querySelector(`.map__pin`);
 
@@ -19,9 +18,9 @@
    * Создаем массив случайных объектов.
    * @return {array} - Массив случайных объектов.
    */
-  const createLib = function () {
+  const createLib = function (volume) {
     let array = [];
-    for (let i = 0; i <= LIB_SIZE; i++) {
+    for (let i = 0; i < volume; i++) {
       array[i] = {'author': {}, 'offer': {}, 'location': {}};
       array[i].author = {
         'avatar': `../img/avatars/user0${i + 1}.png`
@@ -32,16 +31,16 @@
       };
       array[i].offer = {
         'title': ` `,
-        'address': array[i].location[`x`].toString() + `, ` + array[i].location[`y`].toString(),
+        'address': `${array[i].location[`x`]}, ${array[i].location[`y`]}`,
         'price': ` `,
-        'type': window.randomParameter(libType),
+        'type': window.data.randomParameter(libType),
         'rooms': ` `,
         'guests': ` `,
-        'checkin': window.randomParameter(libCheck),
-        'checkout': window.randomParameter(libCheck),
-        'features': window.randomArray(libFeatures),
+        'checkin': window.data.randomParameter(libCheck),
+        'checkout': window.data.randomParameter(libCheck),
+        'features': window.data.randomArray(libFeatures),
         'description': ` `,
-        'photos': window.randomArray(libPhotos)
+        'photos': window.data.randomArray(libPhotos)
       };
     }
     return array;
@@ -69,6 +68,10 @@
     }
   };
 
-  // let library = createLib();
+  // let library = createLib(LIB_SIZE);
   // createPins(library);
+
+  window.pin = {
+    mainPin: mapPins.querySelector(`.map__pin--main`)
+  };
 }());

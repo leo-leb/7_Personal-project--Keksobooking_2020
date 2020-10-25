@@ -7,11 +7,11 @@
     '100': `0`,
   };
 
-  window.formParent = document.querySelector(`.ad-form`);
-  window.formChilds = window.formParent.querySelectorAll(`fieldset`);
-  window.formAddress = window.formParent.querySelector(`#address`);
-  const formRoom = window.formParent.querySelector(`#room_number`);
-  const formCapacity = window.formParent.querySelector(`#capacity`);
+  const formParent = document.querySelector(`.ad-form`);
+  const formChilds = formParent.querySelectorAll(`fieldset`);
+  const formAddress = formParent.querySelector(`#address`);
+  const formRoom = formParent.querySelector(`#room_number`);
+  const formCapacity = formParent.querySelector(`#capacity`);
 
   /**
    * Ограничиваем допустимое количество мест в соответствии с количеством комнат жилья.
@@ -29,7 +29,11 @@
   /**
    * Обработчик на соответствие количества гостей выбранному количеству комнат.
    */
-  formCapacity.addEventListener(`change`, function () {
-    setGuestsLimit();
-  });
+  formCapacity.addEventListener(`change`, () => setGuestsLimit());
+
+  window.form = {
+    formParent: formParent,
+    formChilds: formChilds,
+    formAddress: formAddress
+  };
 }());
