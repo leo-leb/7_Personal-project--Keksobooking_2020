@@ -15,7 +15,7 @@
    * @param {number} height - Высота объекта.
    * @return - Массив координат объекта.
    */
-  const calcPositionStart = function (width, height) {
+  const calcPositionStart = (width, height) => {
     return [Math.round(map.offsetWidth / 2 - width / 2), Math.round(map.offsetHeight / 2 - height / 2)];
   };
 
@@ -25,7 +25,7 @@
    * @param {number} height - Высота объекта.
    * @return - Массив координат объекта.
    */
-  const calcPositionActive = function (width, height) {
+  const calcPositionActive = (width, height) => {
     return [Math.round(map.offsetWidth / 2 - width / 2), Math.round(map.offsetHeight / 2 - height)];
   };
 
@@ -34,7 +34,7 @@
    * @param {*} object - Исходный элемент разметки.
    * @param {array} objectPos - Массив актуальных координат.
    */
-  const setPosition = function (object, objectPos) {
+  const setPosition = (object, objectPos) => {
     object.style.left = `${objectPos[0]}px`;
     object.style.top = `${objectPos[1]}px`;
   };
@@ -42,7 +42,7 @@
     /**
    * Деактивация страницы.
    */
-  const setPassivePage = function () {
+  const setPassivePage = () => {
     mapFilterChilds.forEach(element => element.setAttribute(`disabled`, true));
     window.form.formChilds.forEach(element => element.setAttribute(`disabled`, true));
     const mainPinPos = calcPositionStart(PIN_X, PIN_Y_START);
@@ -53,7 +53,7 @@
   /**
    * Активация страницы.
    */
-  const setActivePage = function () {
+  const setActivePage = () => {
     map.classList.remove(`map--faded`);
     window.form.formParent.classList.remove(`ad-form--disabled`);
     mapFilterChilds.forEach(element => element.removeAttribute(`disabled`, true));

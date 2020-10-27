@@ -16,7 +16,7 @@
   /**
    * Ограничиваем допустимое количество мест в соответствии с количеством комнат жилья.
    */
-  const setGuestsLimit = function () {
+  const setGuestsLimit = () => {
     let selectedRoom = formRoom[formRoom.selectedIndex].value;
     let selectedCapacity = formCapacity[formCapacity.selectedIndex].value;
     if (livingRules[selectedRoom].includes(selectedCapacity)) {

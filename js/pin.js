@@ -18,7 +18,7 @@
    * Создаем массив случайных объектов.
    * @return {array} - Массив случайных объектов.
    */
-  const createLib = function (volume) {
+  const createLib = (volume) => {
     let array = [];
     for (let i = 0; i < volume; i++) {
       array[i] = {'author': {}, 'offer': {}, 'location': {}};
@@ -49,7 +49,7 @@
   /**
    * Копируем template и добавляем в разметку - в блок "map__pins".
    */
-  const fillMap = function () {
+  const fillMap = () => {
     let mapPin = newItemPin.cloneNode(true);
     mapPins.appendChild(mapPin);
   };
@@ -58,7 +58,7 @@
    * Используя данные исходного массива и функцию добавления в разметку новых объектов, наполняем элементы стилями и пр. инфо.
    * @param {array} array - Исходный массив.
    */
-  const createPins = function (array) {
+  const createPins = (array) => {
     for (let i = 0; i < array.length; i++) {
       newItemPin.style = `left: ${array[i].location.x + OFFSET_X}px; top: ${array[i].location.y + OFFSET_Y}px`;
       let picture = newItemPin.querySelector(`img`);
