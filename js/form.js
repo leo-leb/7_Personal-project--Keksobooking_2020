@@ -32,8 +32,8 @@
   formCapacity.addEventListener(`change`, () => setGuestsLimit());
 
   window.form = {
-    formParent: formParent,
-    formChilds: formChilds,
-    formAddress: formAddress
+    formParent,
+    formChilds,
+    formAddress
   };
 }());

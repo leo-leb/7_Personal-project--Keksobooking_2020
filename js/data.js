@@ -6,14 +6,18 @@
    * @param {array} array - Исходный массив.
    * @return {number} - Индекс.
    */
-  const randomValue = (array) => {return Math.ceil(Math.random() * array.length);};
+  const randomValue = (array) => {
+    return Math.ceil(Math.random() * array.length);
+  };
 
   /**
    * Возвращает случайный элемент массива.
    * @param {array} array - Исходный массив.
    * @return {string} - Случайный элемент исходного массива.
    */
-  const randomParameter = (array) => {return array[Math.floor(Math.random() * array.length)];};
+  const randomParameter = (array) => {
+    return array[Math.floor(Math.random() * array.length)];
+  };
 
   /**
    * Создаем массив случайной длины из произвольных объектов исходного массива.
@@ -32,7 +36,7 @@
   };
 
   window.data = {
-    randomParameter: randomParameter,
-    randomArray: randomArray
+    randomParameter,
+    randomArray
   };
 }());
