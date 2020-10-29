@@ -61,11 +61,12 @@
     const mainPinPos = calcPositionActive(PIN_X, PIN_Y_ACTIVE);
     setPosition(window.pin.mainPin, mainPinPos);
     window.form.formAddress.value = `${mainPinPos[0]}, ${mainPinPos[1]}`;
-    window.upload(window.pin.createPins);
+    window.upload(window.pin.successCase);
   };
 
   window.map = {
     setPassivePage,
-    setActivePage
+    setActivePage,
+    mapFilterParent
   };
 }());
