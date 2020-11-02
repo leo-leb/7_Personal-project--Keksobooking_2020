@@ -69,8 +69,8 @@
   };
 
   window.map = {
-    setPassivePage,
-    setActivePage,
-    mapFilterParent
+    passivePage: setPassivePage,
+    activePage: setActivePage,
+    filterParent: mapFilterParent
   };
 }());

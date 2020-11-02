@@ -3,7 +3,7 @@
 (function () {
   let pinsLib = [];
 
-  const mapFilterHouse = window.map.mapFilterParent.querySelector(`#housing-type`);
+  const mapFilterHouse = window.map.filterParent.querySelector(`#housing-type`);
 
   /**
    * Обновление карты пинов:
