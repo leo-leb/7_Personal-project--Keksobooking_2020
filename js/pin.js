@@ -1,12 +1,8 @@
 'use strict';
 (function () {
-  const LIB_LIMIT = 5;
-
   const mapPins = document.querySelector(`.map__pins`);
   const pinTemplate = document.querySelector(`#pin`).content;
   const newItemPin = pinTemplate.querySelector(`.map__pin`);
-
-  let pinsLib = [];
 
   /**
    * Копируем template и добавляем в разметку - в блок "map__pins".
@@ -20,20 +16,19 @@
    * Очищаем карту от пинов.
    */
   const clearMap = () => {
-    const mapPinsAll = mapPins.querySelectorAll(`.map__pin`);
+    const mapPinsAll = mapPins.querySelectorAll(`button:not(.map__pin--main)`);
     for (let mapPin of mapPinsAll) {
-      if (mapPin.className === `map__pin`) {
-        mapPins.removeChild(mapPin);
-      }
+      mapPins.removeChild(mapPin);
     }
   };
 
   /**
    * Используя данные исходного массива и функцию добавления в разметку новых объектов, наполняем элементы стилями и пр. инфо.
-   * @param {array} array - Исходный массив.
+   * @param {array} array - Массив пинов.
+   * @param {number} limit - Максимально допустимое количество пинов.
    */
-  const createPins = (array) => {
-    for (let i = 0; i < LIB_LIMIT; i++) {
+  const createPins = (array, limit) => {
+    for (let i = 0; i < limit; i++) {
       newItemPin.style = `left: ${array[i].location.x}px; top: ${array[i].location.y}px`;
       let picture = newItemPin.querySelector(`img`);
       picture.src = `${array[i].author.avatar}`;
@@ -42,21 +37,9 @@
     }
   };
 
-  window.updatePins = () => {
-    clearMap();
-    const sameHouse = pinsLib.filter((pin) => {
-      return pin.offer.type === window.mapFilterHouse.value;
-    });
-    createPins(sameHouse);
-  };
-
-  const successCase = (data) => {
-    pinsLib = data;
-    window.updatePins();
-  };
-
   window.pin = {
-    mainPin: mapPins.querySelector(`.map__pin--main`),
-    successCase
+    main: mapPins.querySelector(`.map__pin--main`),
+    clear: clearMap,
+    create: createPins
   };
 }());

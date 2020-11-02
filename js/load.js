@@ -1,16 +1,16 @@
 'use strict';
 (function () {
   const URL = `https://21.javascript.pages.academy/keksobooking/data`;
-  const STATUS_CODE = {
+  const StatusCode = {
     OK: 200
   };
 
-  window.upload = (onSuccess) => {
+  const download = (onSuccess) => {
     let xhr = new XMLHttpRequest();
     xhr.responseType = `json`;
 
     xhr.addEventListener(`load`, function () {
-      if (xhr.status === STATUS_CODE.OK) {
+      if (xhr.status === StatusCode.OK) {
         onSuccess(xhr.response);
       } else {
         const infoWindow = document.createElement(`div`);
@@ -22,5 +22,9 @@
 
     xhr.open(`GET`, URL);
     xhr.send();
+  };
+
+  window.load = {
+    download
   };
 }());

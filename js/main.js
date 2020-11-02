@@ -9,7 +9,7 @@
   /**
    * Активация страницы по клику левой клавиши мыши.
    */
-  window.pin.mainPin.addEventListener(`mousedown`, (evt) => {
+  window.pin.main.addEventListener(`mousedown`, (evt) => {
     if (evt.which === 1) {
       window.map.setActivePage();
     }
@@ -18,7 +18,7 @@
   /**
    * Активация страницы по нажатию Enter в фокусе.
    */
-  window.pin.mainPin.addEventListener(`keydown`, (evt) => {
+  window.pin.main.addEventListener(`keydown`, (evt) => {
     if (evt.keyCode === 13) {
       window.map.setActivePage();
     }
