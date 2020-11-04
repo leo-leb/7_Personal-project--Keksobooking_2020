@@ -54,9 +54,6 @@
     window.form.address.value = `${mainPinPos.X}, ${mainPinPos.Y}`;
   };
 
-  /**
-   * Активация страницы.
-   */
   const setActivePage = () => {
     map.classList.remove(`map--faded`);
     window.form.parent.classList.remove(`ad-form--disabled`);
