@@ -5,11 +5,15 @@
     OK: 200
   };
 
+  /**
+   * Загрузка данных с сервера.
+   * @param {function} onSuccess - Функция для истинного условия.
+   */
   const download = (onSuccess) => {
     let xhr = new XMLHttpRequest();
     xhr.responseType = `json`;
 
-    xhr.addEventListener(`load`, function () {
+    const onServerLoading = () => {
       if (xhr.status === StatusCode.OK) {
         onSuccess(xhr.response);
       } else {
@@ -18,13 +22,15 @@
         infoWindow.style.color = `red`;
         document.body.insertAdjacentElement(`afterend`, infoWindow);
       }
-    });
+    };
+
+    xhr.addEventListener(`load`, onServerLoading);
 
     xhr.open(`GET`, URL);
     xhr.send();
   };
 
-  window.load = {
+  window.server = {
     download
   };
 }());

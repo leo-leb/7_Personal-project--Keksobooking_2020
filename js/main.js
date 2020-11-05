@@ -4,27 +4,15 @@
   /**
    * Запуск титульной страницы.
    */
-  window.map.passivePage();
+  window.map.locking();
 
   /**
-   * Активация страницы по клику левой клавиши мыши.
+   * Активация страницы по клику мыши и Enter.
    */
-  window.pin.main.addEventListener(`mousedown`, (evt) => {
-    evt.preventDefault();
-    if (evt.which === 1) {
-      window.map.activePage();
-    }
-  }, {once: true});
-
-  // mainPin.addEventListener(`mousedown`, window.map.activePage());
-  // mainPin.removeEventListener(`mousedown`, window.map.activePage);
-
-  /**
-   * Активация страницы по нажатию Enter в фокусе.
-   */
-  window.pin.main.addEventListener(`keydown`, (evt) => {
+  window.map.mainPin.addEventListener(`mousedown`, window.map.unlocking);
+  window.map.mainPin.addEventListener(`keydown`, (evt) => {
     if (evt.keyCode === 13) {
-      window.map.activePage();
+      window.map.unlocking();
     }
-  }, {once: true});
+  });
 }());

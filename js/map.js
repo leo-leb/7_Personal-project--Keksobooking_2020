@@ -10,64 +10,65 @@
   const map = document.querySelector(`.map`);
   const mapFilterParent = map.querySelector(`.map__filters`);
   const mapFilterChilds = mapFilterParent.querySelectorAll(`.map__filter`);
+  const mapElements = document.querySelector(`.map__pins`);
+  const mainPin = mapElements.querySelector(`.map__pin--main`);
+  const pinTemplate = document.querySelector(`#pin`).content;
+  const newItemPin = pinTemplate.querySelector(`.map__pin`);
+  const cardTemplate = document.querySelector(`#card`).content;
+  const newItemCard = cardTemplate.querySelector(`.map__card`);
 
   /**
-   * Возвращает массив расчитанных координат исследуемого объекта для стартовой страницы.
-   * @param {number} width - Ширина объекта.
-   * @param {number} height - Высота объекта.
-   * @return {array} - Массив координат объекта.
+   * Блокирование страницы.
    */
-  const calcPositionStart = (width, height) => {
-    return {'X': Math.round(map.offsetWidth / 2 - width / 2), 'Y': Math.round(map.offsetHeight / 2 - height / 2)};
-  };
-
-  /**
-   * Возвращает массив расчитанных координат исследуемого объекта для активной страницы.
-   * @param {number} width - Ширина объекта.
-   * @param {number} height - Высота объекта.
-   * @return {array} - Массив координат объекта.
-   */
-  const calcPositionActive = (width, height) => {
-    return {'X': Math.round(map.offsetWidth / 2 - width / 2), 'Y': Math.round(map.offsetHeight / 2 - height)};
-  };
-
-  /**
-   * Присваивает актуальные координаты исходному элементу разметки.
-   * @param {*} object - Исходный элемент разметки.
-   * @param {array} objectPos - Массив актуальных координат.
-   */
-  const setPosition = (object, objectPos) => {
-    object.style.left = `${objectPos.X}px`;
-    object.style.top = `${objectPos.Y}px`;
-  };
-
-  /**
-   * Деактивация страницы.
-   */
-  const setPassivePage = () => {
+  const onPageLocking = () => {
     map.classList.add(`map--faded`);
     window.form.parent.classList.add(`ad-form--disabled`);
     mapFilterChilds.forEach((element) => element.setAttribute(`disabled`, true));
     window.form.childs.forEach((element) => element.setAttribute(`disabled`, true));
-    const mainPinPos = calcPositionStart(MainPinSizes.X, MainPinSizes.Y1);
-    setPosition(window.pin.main, mainPinPos);
+    const mainPinPos = window.pin.calcLockPosition(MainPinSizes.X, MainPinSizes.Y1);
+    window.pin.setPosition(mainPin, mainPinPos);
     window.form.address.value = `${mainPinPos.X}, ${mainPinPos.Y}`;
   };
 
-  const setActivePage = () => {
+  /**
+   * Разблокирование страницы.
+   */
+  const onPageUnlocking = () => {
     map.classList.remove(`map--faded`);
     window.form.parent.classList.remove(`ad-form--disabled`);
     mapFilterChilds.forEach((element) => element.removeAttribute(`disabled`, true));
     window.form.childs.forEach((element) => element.removeAttribute(`disabled`, true));
-    const mainPinPos = calcPositionActive(MainPinSizes.X, MainPinSizes.Y2);
-    setPosition(window.pin.main, mainPinPos);
+    const mainPinPos = window.pin.calcUnlockPosition(MainPinSizes.X, MainPinSizes.Y2);
+    window.pin.setPosition(mainPin, mainPinPos);
     window.form.address.value = `${mainPinPos.X}, ${mainPinPos.Y}`;
-    window.load.download(window.filter.success);
+    window.server.download(window.filter.success);
+    mainPin.removeEventListener(`mousedown`, onPageUnlocking);
+  };
+
+  /**
+   * Используя данные исходного массива и функцию добавления в разметку новых объектов, наполняем элементы стилями и пр. инфо.
+   * @param {array} array - Массив пинов.
+   * @param {number} limit - Максимально допустимое количество пинов.
+   */
+  const fillMap = (array, limit) => {
+    for (let i = 0; i < array.length && i < limit; i++) {
+      window.common.create(newItemPin, mapElements);
+      window.common.create(newItemCard, mapElements);
+    }
+    window.mapPinsAll = mapElements.querySelectorAll(`button:not(.map__pin--main):not(.popup__close)`);
+    window.mapWindowsAll = mapElements.querySelectorAll(`.map__card`);
+    for (let i = 0; i < array.length && i < limit; i++) {
+      window.pin.fill(window.mapPinsAll[i], array[i]);
+      window.card.fill(window.mapWindowsAll[i], array[i]);
+    }
   };
 
   window.map = {
-    passivePage: setPassivePage,
-    activePage: setActivePage,
-    filterParent: mapFilterParent
+    fill: fillMap,
+    locking: onPageLocking,
+    unlocking: onPageUnlocking,
+    allElements: mapElements,
+    mainPin,
+    filterParent: mapFilterParent,
   };
 }());

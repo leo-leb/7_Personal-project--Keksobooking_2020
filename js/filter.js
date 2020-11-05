@@ -9,9 +9,9 @@
    * Обновление карты пинов:
    * Очистка карты -> Массив в соответствии с фильтром -> Заполнение карты.
    */
-  const updatePins = () => {
-    window.pin.clearP();
-    window.pin.clearW();
+  const onMapUpdate = () => {
+    window.pin.remove();
+    window.card.remove();
     if (mapFilterHouse.value === `any`) {
       window.sameHouse = pinsLib;
     } else {
@@ -19,7 +19,7 @@
         return pin.offer.type === mapFilterHouse.value;
       });
     }
-    window.pin.fill(window.sameHouse, 5);
+    window.map.fill(window.sameHouse, 5);
   };
 
   /**
@@ -29,22 +29,12 @@
    */
   const successCase = (data) => {
     pinsLib = data;
-    updatePins();
+    onMapUpdate();
   };
 
-  mapFilterHouse.addEventListener(`change`, () => updatePins());
+  mapFilterHouse.addEventListener(`change`, onMapUpdate);
 
   window.filter = {
     success: successCase
   };
 }());
-
-// window.pinsList = window.pin.mapP.querySelectorAll(`.map__pin`);
-// const someFunction = (object) => {
-//   window.avatar = object.querySelector(`img`);
-//   let foundObject = window.sameHouse.filter((element) => {
-//     return element.author.avatar === avatar;
-//   });
-//   window.pin.createW(foundObject);
-// };
-// window.mapPin.addEventListener(`mousedown`, someFunction(window.mapPin));
