@@ -68,7 +68,8 @@
     locking: onPageLocking,
     unlocking: onPageUnlocking,
     allElements: mapElements,
-    mainPin,
     filterParent: mapFilterParent,
+    mainPin,
+    MainPinSizes
   };
 }());

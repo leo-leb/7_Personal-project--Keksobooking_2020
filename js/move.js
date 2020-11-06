@@ -1,46 +1,49 @@
 'use strict';
 
 (function () {
-  /**
-   * Подвижность главного пина.
-   */
+  const X_MIN = 0;
+  const X_MAX = 1200;
+  const Y_MIN = 130;
+  const Y_MAX = 630;
+
   const mainPin = window.map.mainPin;
 
   const onMouseDown = (evt) => {
     evt.preventDefault();
-
-    let startCoords = {
+    window.startCoords = {
       X: evt.clientX,
       Y: evt.clientY
     };
-
     const onMouseMove = (moveEvt) => {
       moveEvt.preventDefault();
-
       let shift = {
-        X: startCoords.X - moveEvt.clientX,
-        Y: startCoords.Y - moveEvt.clientY
+        X: window.startCoords.X - moveEvt.clientX,
+        Y: window.startCoords.Y - moveEvt.clientY
       };
-
-      startCoords = {
+      window.startCoords = {
         X: moveEvt.clientX,
         Y: moveEvt.clientY
       };
-
-      mainPin.style.top = (mainPin.offsetTop - shift.Y) + `px`;
-      mainPin.style.left = (mainPin.offsetLeft - shift.X) + `px`;
+      let actualPos = {
+        x: mainPin.offsetLeft - shift.X,
+        y: mainPin.offsetTop - shift.Y
+      };
+      let limitPos = {
+        x: actualPos.x + window.map.MainPinSizes.X / 2,
+        y: actualPos.y
+      };
+      if (X_MIN < limitPos.x && limitPos.x < X_MAX && Y_MIN < limitPos.y && limitPos.y < Y_MAX) {
+        mainPin.style.top = actualPos.y + `px`;
+        mainPin.style.left = actualPos.x + `px`;
+      }
     };
-
     const onMouseUp = (upEvt) => {
       upEvt.preventDefault();
-
       document.removeEventListener(`mousemove`, onMouseMove);
       document.removeEventListener(`mouseup`, onMouseUp);
     };
-
     document.addEventListener(`mousemove`, onMouseMove);
     document.addEventListener(`mouseup`, onMouseUp);
   };
-
   mainPin.addEventListener(`mousedown`, onMouseDown);
 }());
