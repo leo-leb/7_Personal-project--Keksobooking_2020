@@ -1,6 +1,7 @@
 'use strict';
 (function () {
   const URL = `https://21.javascript.pages.academy/keksobooking/data`;
+  const URL2 = `https://21.javascript.pages.academy/keksobooking`;
   const StatusCode = {
     OK: 200
   };
@@ -25,12 +26,32 @@
     };
 
     xhr.addEventListener(`load`, onServerLoading);
-
     xhr.open(`GET`, URL);
     xhr.send();
   };
 
+  const load = () => {
+    const form = document.querySelector(`.ad-form`);
+    const formData = new FormData(form);
+    let request = new XMLHttpRequest();
+    const onServerLoading = () => {
+      if (request.status === StatusCode.OK) {
+        window.map.clear();
+        window.map.locking();
+      } else {
+        const infoWindow = document.createElement(`div`);
+        infoWindow.textContent = `Статус ответа: ` + request.status + ` ` + request.statusText;
+        infoWindow.style.color = `red`;
+        document.body.insertAdjacentElement(`afterend`, infoWindow);
+      }
+    };
+    request.addEventListener(`load`, onServerLoading);
+    request.open(`POST`, URL2);
+    request.send(formData);
+  };
+
   window.server = {
-    download
+    download,
+    load
   };
 }());

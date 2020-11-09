@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  window.formButton = document.querySelector(`.ad-form__submit`);
+
   /**
    * Запуск титульной страницы.
    */
@@ -15,4 +17,11 @@
    */
   window.map.mainPin.addEventListener(`mousedown`, window.map.unlocking);
   window.map.mainPin.addEventListener(`keydown`, onMainPinEnterPress);
+
+  window.formButton.addEventListener(`click`, function (evt) {
+    evt.preventDefault();
+    window.server.load();
+  });
+
+// window.server.load();
 }());

@@ -12,8 +12,7 @@
    * Очистка карты -> Массив в соответствии с фильтром -> Заполнение карты.
    */
   const getUpdatedMap = () => {
-    window.pin.remove();
-    window.card.remove();
+    window.map.clear();
     if (mapFilterHouse.value === `any`) {
       window.sameHouse = pinsLib;
     } else {

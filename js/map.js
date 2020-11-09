@@ -80,7 +80,13 @@
     }
   };
 
+  const clearMap = () => {
+    window.pin.remove();
+    window.card.remove();
+  };
+
   window.map = {
+    clear: clearMap,
     fill: fillMap,
     locking: onPageLocking,
     unlocking: onPageUnlocking,
