@@ -48,8 +48,8 @@
    * Очищаем карту от пинов.
    */
   const removePins = () => {
-    const mapPinsAll = window.map.allElements.querySelectorAll(`button:not(.map__pin--main)`);
-    mapPinsAll.forEach((element) => {
+    const allPins = window.map.allElements.querySelectorAll(`button:not(.map__pin--main):not(.popup__close)`);
+    allPins.forEach((element) => {
       element.remove();
     });
   };

@@ -2,27 +2,34 @@
 (function () {
   const featuresLib = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
 
+  const typeOfHouse = {
+    'bungalow': `Бунгало`,
+    'flat': `Квартира`,
+    'house': `Дом`,
+    'palace': `Дворец`,
+  };
+
   /**
    * Проверка на наличие данных.
-   * @param {element} parameter - Элемент разметки.
+   * @param {element} element - Элемент разметки.
    * @param {*} array - Объект загруженных данных с сервера.
    * @param {*} action - Действие для выполнения истинного условия.
    */
-  const checkExist = (parameter, array, action) => {
+  const checkExist = (element, array, action) => {
     if (array.length !== 0) {
       action;
     } else {
-      parameter.remove();
+      element.remove();
     }
   };
 
   /**
    * Заполнение текстового содержания элемента разметки в соответствии с серверными данными.
-   * @param {element} parameter - Элемент разметки.
+   * @param {element} element - Элемент разметки.
    * @param {*} array - Объект загруженных данных с сервера.
    */
-  const fillTextContent = (parameter, array) => {
-    parameter.textContent = array;
+  const fillTextContent = (element, array) => {
+    element.textContent = array;
   };
 
   /**
@@ -38,7 +45,7 @@
     checkExist(address, cellFromLibrary.offer.address, fillTextContent(address, cellFromLibrary.offer.address));
 
     let type = block.querySelector(`.popup__type`);
-    checkExist(type, cellFromLibrary.offer.type, fillTextContent(type, cellFromLibrary.offer.type));
+    checkExist(type, cellFromLibrary.offer.type, fillTextContent(type, typeOfHouse[cellFromLibrary.offer.type]));
 
     let description = block.querySelector(`.popup__description`);
     checkExist(description, cellFromLibrary.offer.description, fillTextContent(description, cellFromLibrary.offer.description));
@@ -81,17 +88,28 @@
   };
 
   /**
-   * Очищаем карту от пинов.
+   * Очищаем карту от карточек.
    */
   const removeCards = () => {
-    const mapBlocksAll = window.map.allElements.querySelectorAll(`article`);
-    mapBlocksAll.forEach((element) => {
+    const allCards = window.map.allElements.querySelectorAll(`article`);
+    allCards.forEach((element) => {
       element.remove();
+    });
+  };
+
+  /**
+   * Скрываем все карточки.
+   */
+  const hideCards = () => {
+    const allCards = window.map.allElements.querySelectorAll(`article`);
+    allCards.forEach((element) => {
+      element.style.display = `none`;
     });
   };
 
   window.card = {
     fill: fillCard,
-    remove: removeCards
+    remove: removeCards,
+    hide: hideCards
   };
 }());

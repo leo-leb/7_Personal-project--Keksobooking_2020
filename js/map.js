@@ -27,7 +27,6 @@
     window.form.childs.forEach((element) => element.setAttribute(`disabled`, true));
     const mainPinPos = window.pin.calcLockPosition(MainPinSizes.X, MainPinSizes.Y1);
     window.pin.setPosition(mainPin, mainPinPos);
-    window.form.address.value = `${mainPinPos.X}, ${mainPinPos.Y}`;
   };
 
   /**
@@ -55,11 +54,29 @@
       window.common.create(newItemPin, mapElements);
       window.common.create(newItemCard, mapElements);
     }
-    window.mapPinsAll = mapElements.querySelectorAll(`button:not(.map__pin--main):not(.popup__close)`);
-    window.mapWindowsAll = mapElements.querySelectorAll(`.map__card`);
+    const allPins = mapElements.querySelectorAll(`button:not(.map__pin--main):not(.popup__close)`);
+    const allCards = mapElements.querySelectorAll(`.map__card`);
+    window.card.hide();
     for (let i = 0; i < array.length && i < limit; i++) {
-      window.pin.fill(window.mapPinsAll[i], array[i]);
-      window.card.fill(window.mapWindowsAll[i], array[i]);
+      let somePin = allPins[i];
+      let someCard = allCards[i];
+      let closeCard = someCard.querySelector(`.popup__close`);
+      window.pin.fill(somePin, array[i]);
+      window.card.fill(someCard, array[i]);
+      const hideCard = () => {
+        someCard.style.display = `none`;
+        document.removeEventListener(`keydown`, onCardEscPress);
+      };
+      const onCardEscPress = (evt) => {
+        window.common.isEscEvent(evt, hideCard);
+      };
+      const showCard = () => {
+        window.card.hide();
+        someCard.style.display = `block`;
+        closeCard.addEventListener(`click`, hideCard);
+        document.addEventListener(`keydown`, onCardEscPress);
+      };
+      somePin.addEventListener(`click`, showCard);
     }
   };
 

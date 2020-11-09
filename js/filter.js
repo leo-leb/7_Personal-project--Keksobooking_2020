@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  let PINS_LIM = 5;
+
   let pinsLib = [];
 
   const mapFilterHouse = window.map.filterParent.querySelector(`#housing-type`);
@@ -9,7 +11,7 @@
    * Обновление карты пинов:
    * Очистка карты -> Массив в соответствии с фильтром -> Заполнение карты.
    */
-  const onMapUpdate = () => {
+  const getUpdatedMap = () => {
     window.pin.remove();
     window.card.remove();
     if (mapFilterHouse.value === `any`) {
@@ -19,7 +21,7 @@
         return pin.offer.type === mapFilterHouse.value;
       });
     }
-    window.map.fill(window.sameHouse, 5);
+    window.map.fill(window.sameHouse, PINS_LIM);
   };
 
   /**
@@ -29,10 +31,10 @@
    */
   const successCase = (data) => {
     pinsLib = data;
-    onMapUpdate();
+    getUpdatedMap();
   };
 
-  mapFilterHouse.addEventListener(`change`, onMapUpdate);
+  mapFilterHouse.addEventListener(`change`, getUpdatedMap);
 
   window.filter = {
     success: successCase
