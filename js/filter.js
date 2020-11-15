@@ -63,7 +63,7 @@
   /**
    * Обновление карты в соответствии с выбранными критериями фильтрации.
    */
-  const filterHandler = () => {
+  const onMapFilter = () => {
     window.map.clear();
     let pinsOnMap = filterData(pinsLib);
     window.debounce(() => window.map.fill(pinsOnMap, PINS_LIM));
@@ -82,7 +82,7 @@
   /**
    * Обработчик на обновление карты при изменении критериев фильтрации.
    */
-  formFiltersParent.addEventListener(`change`, filterHandler);
+  formFiltersParent.addEventListener(`change`, onMapFilter);
 
   window.filter = {
     success: successCase

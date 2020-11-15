@@ -73,20 +73,20 @@
       let closeCard = someCard.querySelector(`.popup__close`);
       window.pin.fill(somePin, array[i]);
       window.card.fill(someCard, array[i]);
-      const hideCardHandler = () => {
+      const onCardHide = () => {
         someCard.style.display = `none`;
         document.removeEventListener(`keydown`, onCardEscPress);
       };
       const onCardEscPress = (evt) => {
-        window.common.escEvt(evt, hideCardHandler);
+        window.common.escEvt(evt, onCardHide);
       };
-      const showCardHandler = () => {
+      const onCardShow = () => {
         window.card.hide();
         someCard.style.display = `block`;
-        closeCard.addEventListener(`click`, hideCardHandler);
+        closeCard.addEventListener(`click`, onCardHide);
         document.addEventListener(`keydown`, onCardEscPress);
       };
-      somePin.addEventListener(`click`, showCardHandler);
+      somePin.addEventListener(`click`, onCardShow);
     }
   };
 

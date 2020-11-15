@@ -54,7 +54,7 @@
   /**
    * Обработчик на ограничения по допустимой длине заголовка.
    */
-  formTitle.addEventListener(`input`, function () {
+  formTitle.addEventListener(`input`, () => {
     if (formTitle.validity.tooShort) {
       formTitle.setCustomValidity(`Заголовок должен состоять минимум из 30-и символов`);
     } else if (formTitle.validity.tooLong) {
@@ -70,7 +70,7 @@
   /**
    * Устанавливаем лимит на минимальную стоимость на основе выбранного жилья.
    */
-  const priceLimitHandler = () => {
+  const onPriceLimit = () => {
     let houses = Object.keys(typeOfHouse);
     let selectedType = formType[formType.selectedIndex].value;
     if (selectedType === houses[0]) {
@@ -91,12 +91,12 @@
   /**
    * Обработчик на соответствие минимальной цены типу выбранного жилья.
    */
-  formType.addEventListener(`change`, priceLimitHandler);
+  formType.addEventListener(`change`, onPriceLimit);
 
   /**
    * Обработчик на ограничения по допустимой цене.
    */
-  formPrice.addEventListener(`input`, function () {
+  formPrice.addEventListener(`input`, () => {
     if (formPrice.validity.rangeUnderflow) {
       formPrice.setCustomValidity(`Слишком низкая стоимость`);
     } else if (formPrice.validity.rangeOverflow) {
@@ -109,7 +109,7 @@
     formPrice.reportValidity();
   });
 
-  formPrice.addEventListener(`change`, function () {
+  formPrice.addEventListener(`change`, () => {
     if (formPrice.validity.rangeUnderflow) {
       formPrice.setCustomValidity(`Слишком низкая стоимость`);
     } else if (formPrice.validity.rangeOverflow) {
@@ -122,23 +122,23 @@
     formPrice.reportValidity();
   });
 
-  const checkInHandler = () => {
+  const onCheckInLimit = () => {
     formTimeOut.selectedIndex = formTimeIn.selectedIndex;
   };
 
   /**
    * Обработчик на соответствие время выезда времени заезда.
    */
-  formTimeIn.addEventListener(`change`, checkInHandler);
+  formTimeIn.addEventListener(`change`, onCheckInLimit);
 
-  const checkOutHandler = () => {
+  const onCheckOutLimit = () => {
     formTimeIn.selectedIndex = formTimeOut.selectedIndex;
   };
 
   /**
    * Обработчик на соответствие время заезда времени выезда.
    */
-  formTimeOut.addEventListener(`change`, checkOutHandler);
+  formTimeOut.addEventListener(`change`, onCheckOutLimit);
 
   const onEscPressInSuccess = (evt) => window.common.escEvt(evt, removeSuccessWindow);
   const onMousePressInSuccess = (evt) => window.common.leftButtonEvt(evt, removeSuccessWindow);

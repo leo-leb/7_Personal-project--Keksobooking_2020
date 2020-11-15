@@ -5,6 +5,15 @@
     'download': `https://21.javascript.pages.academy/keksobooking/data`
   };
 
+  const TIME_LIM = 1000;
+
+  const StatusCode = {
+    OK: 200,
+    requestError: 400,
+    userError: 401,
+    dataError: 404
+  };
+
   /**
    * Возвращает объект с расчитанными координатами элемента.
    * @param {string} message - Ширина элемента.
@@ -27,19 +36,21 @@
    * @param {function} onError - Действие при неуспешной загрузке данных.
    */
   const serverReader = (request, onSuccess, onError) => {
+    request.responseType = `json`;
+    request.timeout = TIME_LIM;
     request.addEventListener(`load`, () => {
       let error;
       switch (request.status) {
-        case 200:
+        case StatusCode.OK:
           onSuccess(request.response);
           break;
-        case 400:
+        case StatusCode.requestError:
           error = `Неверный запрос`;
           break;
-        case 401:
+        case StatusCode.userError:
           error = `Пользователь не авторизован`;
           break;
-        case 404:
+        case StatusCode.dataError:
           error = `Ничего не найдено`;
           break;
         default:
@@ -61,9 +72,7 @@
    */
   const downloadFromServer = (url, onSuccess, onError) => {
     let xhr = new XMLHttpRequest();
-    xhr.responseType = `json`;
     serverReader(xhr, onSuccess, onError);
-    xhr.timeout = 1000;
     xhr.open(`GET`, url);
     xhr.send();
   };
@@ -79,7 +88,6 @@
     const formData = new FormData(form);
     let xhr = new XMLHttpRequest();
     serverReader(xhr, onSuccess, onError);
-    xhr.timeout = 1000;
     xhr.open(`POST`, url);
     xhr.send(formData);
   };

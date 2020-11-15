@@ -9,7 +9,7 @@
    * Установка задержки на выполнение действия.
    * @param {function} action - Действие.
    */
-  window.debounce = function (action) {
+  window.debounce = (action) => {
     if (lastTimeout) {
       window.clearTimeout(lastTimeout);
     }

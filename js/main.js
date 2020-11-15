@@ -11,7 +11,7 @@
   /**
    * Обработчик на кнопку для отправки формы.
    */
-  formButton.addEventListener(`click`, function (evt) {
+  formButton.addEventListener(`click`, (evt) => {
     evt.preventDefault();
     window.server.load(window.server.URL.load, window.form.mainButtonPress, window.form.getError);
   });
