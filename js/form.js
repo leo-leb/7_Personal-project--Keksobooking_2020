@@ -68,7 +68,7 @@
   /**
    * Устанавливаем лимит на минимальную стоимость на основе выбранного жилья.
    */
-  const priceMinLimit = () => {
+  const priceLimitHandler = () => {
     let houses = Object.keys(typeOfHouse);
     let selectedType = formType[formType.selectedIndex].value;
     if (selectedType === houses[0]) {
@@ -90,7 +90,7 @@
   /**
    * Обработчик на соответствие минимальной цены типу выбранного жилья.
    */
-  formType.addEventListener(`change`, priceMinLimit);
+  formType.addEventListener(`change`, priceLimitHandler);
 
   /**
    * Обработчик на ограничения по допустимой цене.
@@ -107,23 +107,23 @@
     }
   });
 
-  const setCheckIn = () => {
+  const checkInHandler = () => {
     formTimeOut.selectedIndex = formTimeIn.selectedIndex;
   };
 
   /**
    * Обработчик на соответствие время выезда времени заезда.
    */
-  formTimeIn.addEventListener(`change`, setCheckIn);
+  formTimeIn.addEventListener(`change`, checkInHandler);
 
-  const setCheckOut = () => {
+  const checkOutHandler = () => {
     formTimeIn.selectedIndex = formTimeOut.selectedIndex;
   };
 
   /**
    * Обработчик на соответствие время заезда времени выезда.
    */
-  formTimeOut.addEventListener(`change`, setCheckOut);
+  formTimeOut.addEventListener(`change`, checkOutHandler);
 
   const onEscPressInSuccess = (evt) => window.common.escEvt(evt, removeSuccessWindow);
   const onMousePressInSuccess = (evt) => window.common.leftButtonEvt(evt, removeSuccessWindow);
