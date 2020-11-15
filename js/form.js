@@ -189,12 +189,11 @@
     }
   };
 
-  // const onMousePressInReset = (evt) => window.common.leftButtonEvt(evt, window.map.onPageLock);
+  const onEnterPressInReset = (evt) => window.common.leftButtonEvt(evt, window.map.onPageLock());
+  const onMousePressInReset = (evt) => window.common.enterEvt(evt, window.map.onPageLock());
 
-  resetButton.addEventListener(`click`, function (evt) {
-    evt.preventDefault();
-    window.map.onPageLock();
-  });
+  resetButton.addEventListener(`keydown`, onEnterPressInReset);
+  resetButton.addEventListener(`mousedown`, onMousePressInReset);
 
   window.form = {
     parent: form,
