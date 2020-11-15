@@ -31,6 +31,7 @@
   const errorTemplate = document.querySelector(`#error`).content;
   const newItemError = errorTemplate.querySelector(`.error`);
   const errorButton = document.querySelector(`.error__button`);
+  const resetButton = document.querySelector(`.ad-form__reset`);
 
   /**
    * Устанавливаем лимит на допустимое количество мест в соответствии с количеством комнат жилья.
@@ -53,7 +54,7 @@
   /**
    * Обработчик на ограничения по допустимой длине заголовка.
    */
-  formTitle.addEventListener(`onchange`, function () {
+  formTitle.addEventListener(`input`, function () {
     if (formTitle.validity.tooShort) {
       formTitle.setCustomValidity(`Заголовок должен состоять минимум из 30-и символов`);
     } else if (formTitle.validity.tooLong) {
@@ -108,6 +109,19 @@
     formPrice.reportValidity();
   });
 
+  formPrice.addEventListener(`change`, function () {
+    if (formPrice.validity.rangeUnderflow) {
+      formPrice.setCustomValidity(`Слишком низкая стоимость`);
+    } else if (formPrice.validity.rangeOverflow) {
+      formPrice.setCustomValidity(`Цена должна быть не более 1 000 000`);
+    } else if (formPrice.validity.valueMissing) {
+      formPrice.setCustomValidity(`Обязательное поле`);
+    } else {
+      formPrice.setCustomValidity(``);
+    }
+    formPrice.reportValidity();
+  });
+
   const checkInHandler = () => {
     formTimeOut.selectedIndex = formTimeIn.selectedIndex;
   };
@@ -142,9 +156,7 @@
    * Вывод модального окна об успешном заполнении формы по нажатию на главную кнопку.
    */
   const onMainButtonPress = () => {
-    window.map.clear();
     window.map.onPageLock();
-    form.reset();
     window.common.create(messageItem, mainPlace);
     document.addEventListener(`keydown`, onEscPressInSuccess);
     document.addEventListener(`mousedown`, onMousePressInSuccess);
@@ -165,12 +177,24 @@
   /**
    * Вывод модального окна об неуспешном заполнении формы по нажатию на главную кнопку.
    */
+
   const getErrorWindow = () => {
-    window.common.create(newItemError, mainPlace);
-    document.addEventListener(`keydown`, onEscPressInError);
-    document.addEventListener(`mousedown`, onMousePressInError);
-    errorButton.addEventListener(`mousedown`, onMousePressInError);
+    if (form.checkValidity() === true) {
+      window.common.create(newItemError, mainPlace);
+      document.addEventListener(`keydown`, onEscPressInError);
+      document.addEventListener(`mousedown`, onMousePressInError);
+      errorButton.addEventListener(`mousedown`, onMousePressInError);
+    } else {
+      form.reportValidity();
+    }
   };
+
+  // const onMousePressInReset = (evt) => window.common.leftButtonEvt(evt, window.map.onPageLock);
+
+  resetButton.addEventListener(`click`, function (evt) {
+    evt.preventDefault();
+    window.map.onPageLock();
+  });
 
   window.form = {
     parent: form,

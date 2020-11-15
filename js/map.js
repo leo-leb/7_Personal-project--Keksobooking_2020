@@ -25,6 +25,9 @@
    * Блокирование страницы.
    */
   const onPageLocking = () => {
+    window.map.clear();
+    window.form.parent.reset();
+    mapFilterParent.reset();
     map.classList.add(`map--faded`);
     window.form.parent.classList.add(`ad-form--disabled`);
     mapFilterChilds.forEach((element) => element.setAttribute(`disabled`, true));
