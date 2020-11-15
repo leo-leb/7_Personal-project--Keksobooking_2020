@@ -53,7 +53,7 @@
   /**
    * Обработчик на ограничения по допустимой длине заголовка.
    */
-  formTitle.addEventListener(`onchange`, () => {
+  formTitle.addEventListener(`onchange`, function () {
     if (formTitle.validity.tooShort) {
       formTitle.setCustomValidity(`Заголовок должен состоять минимум из 30-и символов`);
     } else if (formTitle.validity.tooLong) {
@@ -63,6 +63,7 @@
     } else {
       formTitle.setCustomValidity(``);
     }
+    formTitle.reportValidity();
   });
 
   /**
@@ -86,7 +87,6 @@
     }
   };
 
-
   /**
    * Обработчик на соответствие минимальной цены типу выбранного жилья.
    */
@@ -95,7 +95,7 @@
   /**
    * Обработчик на ограничения по допустимой цене.
    */
-  formPrice.addEventListener(`invalid`, function () {
+  formPrice.addEventListener(`input`, function () {
     if (formPrice.validity.rangeUnderflow) {
       formPrice.setCustomValidity(`Слишком низкая стоимость`);
     } else if (formPrice.validity.rangeOverflow) {
@@ -105,6 +105,7 @@
     } else {
       formPrice.setCustomValidity(``);
     }
+    formPrice.reportValidity();
   });
 
   const checkInHandler = () => {
