@@ -1,27 +1,18 @@
 'use strict';
 
 (function () {
-  window.formButton = document.querySelector(`.ad-form__submit`);
+  const formButton = document.querySelector(`.ad-form__submit`);
 
   /**
    * Запуск титульной страницы.
    */
-  window.map.locking();
-
-  const onMainPinEnterPress = (evt) => {
-    window.common.isEnterEvent(evt, window.map.unlocking);
-  };
+  window.map.onPageLock();
 
   /**
-   * Активация страницы по клику мыши и Enter.
+   * Обработчик на кнопку для отправки формы.
    */
-  window.map.mainPin.addEventListener(`mousedown`, window.map.unlocking);
-  window.map.mainPin.addEventListener(`keydown`, onMainPinEnterPress);
-
-  window.formButton.addEventListener(`click`, function (evt) {
+  formButton.addEventListener(`click`, function (evt) {
     evt.preventDefault();
-    window.server.load();
+    window.server.load(window.server.URL.load, window.form.mainButtonPress, window.form.getError);
   });
-
-// window.server.load();
 }());

@@ -1,57 +1,91 @@
 'use strict';
 (function () {
-  const URL = `https://21.javascript.pages.academy/keksobooking/data`;
-  const URL2 = `https://21.javascript.pages.academy/keksobooking`;
-  const StatusCode = {
-    OK: 200
+  const URL = {
+    'load': `https://21.javascript.pages.academy/keksobooking`,
+    'download': `https://21.javascript.pages.academy/keksobooking/data`
+  };
+
+  /**
+   * Возвращает объект с расчитанными координатами элемента.
+   * @param {string} message - Ширина элемента.
+   */
+  const getErrorMessage = (message) => {
+    const infoWindow = document.createElement(`div`);
+    infoWindow.textContent = message;
+    infoWindow.style.color = `red`;
+    infoWindow.style.padding = `10px`;
+    infoWindow.style.position = `absolute`;
+    document.body.insertAdjacentElement(`beforebegin`, infoWindow);
+  };
+
+  /**
+   * Обработчик при загрузке данных с сервера.
+   * @param {*} request - Запрос к серверу.
+   * @param {function} onSuccess - Действие при успешной загрузке данных.
+   * @param {function} onError - Действие при неуспешной загрузке данных.
+   */
+  const serverReader = (request, onSuccess, onError) => {
+    request.addEventListener(`load`, () => {
+      let error;
+      switch (request.status) {
+        case 200:
+          onSuccess(request.response);
+          break;
+        case 400:
+          error = `Неверный запрос`;
+          break;
+        case 401:
+          error = `Пользователь не авторизован`;
+          break;
+        case 404:
+          error = `Ничего не найдено`;
+          break;
+        default:
+          error = `Cтатус ответа: : ` + request.status + ` ` + request.statusText;
+      }
+      if (error) {
+        onError(error);
+      }
+    });
+    request.addEventListener(`error`, () => onError(`Произошла ошибка соединения`));
+    request.addEventListener(`timeout`, () => onError(`Запрос не успел выполниться за ` + request.timeout + `мс`));
   };
 
   /**
    * Загрузка данных с сервера.
-   * @param {function} onSuccess - Функция для истинного условия.
+   * @param {*} url - Адрес сервера.
+   * @param {function} onSuccess - Действие при успешной загрузке данных.
+   * @param {function} onError - Действие при неуспешной загрузке данных.
    */
-  const download = (onSuccess) => {
+  const downloadFromServer = (url, onSuccess, onError) => {
     let xhr = new XMLHttpRequest();
     xhr.responseType = `json`;
-
-    const onServerLoading = () => {
-      if (xhr.status === StatusCode.OK) {
-        onSuccess(xhr.response);
-      } else {
-        const infoWindow = document.createElement(`div`);
-        infoWindow.textContent = `Статус ответа: ` + xhr.status + ` ` + xhr.statusText;
-        infoWindow.style.color = `red`;
-        document.body.insertAdjacentElement(`afterend`, infoWindow);
-      }
-    };
-
-    xhr.addEventListener(`load`, onServerLoading);
-    xhr.open(`GET`, URL);
+    serverReader(xhr, onSuccess, onError);
+    xhr.timeout = 1000;
+    xhr.open(`GET`, url);
     xhr.send();
   };
 
-  const load = () => {
+  /**
+   * Загрузка данных на сервер.
+   * @param {*} url - Адрес сервера.
+   * @param {function} onSuccess - Действие при успешной загрузке данных.
+   * @param {function} onError - Действие при неуспешной загрузке данных.
+   */
+  const loadToServer = (url, onSuccess, onError) => {
     const form = document.querySelector(`.ad-form`);
     const formData = new FormData(form);
-    let request = new XMLHttpRequest();
-    const onServerLoading = () => {
-      if (request.status === StatusCode.OK) {
-        window.map.clear();
-        window.map.locking();
-      } else {
-        const infoWindow = document.createElement(`div`);
-        infoWindow.textContent = `Статус ответа: ` + request.status + ` ` + request.statusText;
-        infoWindow.style.color = `red`;
-        document.body.insertAdjacentElement(`afterend`, infoWindow);
-      }
-    };
-    request.addEventListener(`load`, onServerLoading);
-    request.open(`POST`, URL2);
-    request.send(formData);
+    let xhr = new XMLHttpRequest();
+    serverReader(xhr, onSuccess, onError);
+    xhr.timeout = 1000;
+    xhr.open(`POST`, url);
+    xhr.send(formData);
   };
 
   window.server = {
-    download,
-    load
+    URL,
+    error: getErrorMessage,
+    download: downloadFromServer,
+    load: loadToServer
   };
 }());

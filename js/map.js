@@ -10,12 +10,16 @@
   const map = document.querySelector(`.map`);
   const mapFilterParent = map.querySelector(`.map__filters`);
   const mapFilterChilds = mapFilterParent.querySelectorAll(`.map__filter`);
-  const mapElements = document.querySelector(`.map__pins`);
-  const mainPin = mapElements.querySelector(`.map__pin--main`);
+  const mapElementsParent = document.querySelector(`.map__pins`);
+  const mainPin = mapElementsParent.querySelector(`.map__pin--main`);
+  const mainPinRealPos = window.pin.calcReal(MainPinSizes.X, MainPinSizes.Y1);
   const pinTemplate = document.querySelector(`#pin`).content;
   const newItemPin = pinTemplate.querySelector(`.map__pin`);
   const cardTemplate = document.querySelector(`#card`).content;
   const newItemCard = cardTemplate.querySelector(`.map__card`);
+
+  const onMainPinEnterPress = (evt) => window.common.enterEvt(evt, onPageUnlocking);
+  const onMainPinMousePress = (evt) => window.common.leftButtonEvt(evt, onPageUnlocking);
 
   /**
    * Блокирование страницы.
@@ -25,8 +29,11 @@
     window.form.parent.classList.add(`ad-form--disabled`);
     mapFilterChilds.forEach((element) => element.setAttribute(`disabled`, true));
     window.form.childs.forEach((element) => element.setAttribute(`disabled`, true));
-    const mainPinPos = window.pin.calcLockPosition(MainPinSizes.X, MainPinSizes.Y1);
-    window.pin.setPosition(mainPin, mainPinPos);
+    window.pin.set(mainPin, mainPinRealPos);
+    const mainPinFakePos = window.pin.calcFakeCircle(mainPinRealPos, MainPinSizes.X, MainPinSizes.Y1);
+    window.form.address.value = `${mainPinFakePos.X}, ${mainPinFakePos.Y}`;
+    mainPin.addEventListener(`mousedown`, onMainPinMousePress);
+    mainPin.addEventListener(`keydown`, onMainPinEnterPress);
   };
 
   /**
@@ -37,11 +44,11 @@
     window.form.parent.classList.remove(`ad-form--disabled`);
     mapFilterChilds.forEach((element) => element.removeAttribute(`disabled`, true));
     window.form.childs.forEach((element) => element.removeAttribute(`disabled`, true));
-    const mainPinPos = window.pin.calcUnlockPosition(MainPinSizes.X, MainPinSizes.Y2);
-    window.pin.setPosition(mainPin, mainPinPos);
-    window.form.address.value = `${mainPinPos.X}, ${mainPinPos.Y}`;
-    window.server.download(window.filter.success);
-    mainPin.removeEventListener(`mousedown`, onPageUnlocking);
+    const mainPinFakePos = window.pin.calcFakePin(mainPinRealPos, MainPinSizes.X, MainPinSizes.Y2);
+    window.form.address.value = `${mainPinFakePos.X}, ${mainPinFakePos.Y}`;
+    window.server.download(window.server.URL.download, window.filter.success, window.server.error);
+    mainPin.removeEventListener(`mousedown`, onMainPinMousePress);
+    mainPin.removeEventListener(`keydown`, onMainPinEnterPress);
   };
 
   /**
@@ -51,11 +58,11 @@
    */
   const fillMap = (array, limit) => {
     for (let i = 0; i < array.length && i < limit; i++) {
-      window.common.create(newItemPin, mapElements);
-      window.common.create(newItemCard, mapElements);
+      window.common.create(newItemPin, mapElementsParent);
+      window.common.create(newItemCard, mapElementsParent);
     }
-    const allPins = mapElements.querySelectorAll(`button:not(.map__pin--main):not(.popup__close)`);
-    const allCards = mapElements.querySelectorAll(`.map__card`);
+    const allPins = mapElementsParent.querySelectorAll(`button:not(.map__pin--main):not(.popup__close)`);
+    const allCards = mapElementsParent.querySelectorAll(`.map__card`);
     window.card.hide();
     for (let i = 0; i < array.length && i < limit; i++) {
       let somePin = allPins[i];
@@ -68,7 +75,7 @@
         document.removeEventListener(`keydown`, onCardEscPress);
       };
       const onCardEscPress = (evt) => {
-        window.common.isEscEvent(evt, hideCard);
+        window.common.escEvt(evt, hideCard);
       };
       const showCard = () => {
         window.card.hide();
@@ -86,13 +93,11 @@
   };
 
   window.map = {
+    elementsParent: mapElementsParent,
+    mainPin,
+    MainPinSizes,
     clear: clearMap,
     fill: fillMap,
-    locking: onPageLocking,
-    unlocking: onPageUnlocking,
-    allElements: mapElements,
-    filterParent: mapFilterParent,
-    mainPin,
-    MainPinSizes
+    onPageLock: onPageLocking
   };
 }());

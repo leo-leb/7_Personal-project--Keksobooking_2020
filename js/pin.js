@@ -3,33 +3,45 @@
   const map = document.querySelector(`.map`);
 
   /**
-   * Возвращает объект расчитанных координат исследуемого элемента для стартовой страницы.
+   * Возвращает объект с расчитанными координатами элемента.
    * @param {number} width - Ширина элемента.
    * @param {number} height - Высота элемента.
    * @return {object} - Объект с координатами элемента.
    */
-  const calcLockPosition = (width, height) => {
-    return {'X': Math.round(map.offsetWidth / 2 - width / 2), 'Y': Math.round(map.offsetHeight / 2 - height / 2)};
+  const calcRealPos = (width, height) => {
+    return {'X': Math.floor(map.offsetWidth / 2 - width / 2), 'Y': Math.floor(map.offsetHeight / 2 - height / 2)};
   };
 
   /**
-   * Возвращает объект расчитанных координат исследуемого элемента для активной страницы.
+   * Возвращает объект с расчитанными координатами для центра элемента.
+   * @param {object} element - Исходный элемент.
    * @param {number} width - Ширина элемента.
    * @param {number} height - Высота элемента.
    * @return {object} - Объект с координатами элемента.
    */
-  const calcUnlockPosition = (width, height) => {
-    return {'X': Math.round(map.offsetWidth / 2 - width / 2), 'Y': Math.round(map.offsetHeight / 2 - height)};
+  const calcFakePosForCircle = (element, width, height) => {
+    return {'X': Math.ceil(element.X + width / 2), 'Y': Math.ceil(element.Y + height / 2)};
+  };
+
+  /**
+   * Возвращает объект с расчитанными координатами для острого конца элемента.
+   * @param {object} element - Исходный элемент.
+   * @param {number} width - Ширина элемента.
+   * @param {number} height - Высота элемента.
+   * @return {object} - Объект с координатами элемента.
+   */
+  const calcFakePosForPin = (element, width, height) => {
+    return {'X': Math.ceil(element.X + width / 2), 'Y': Math.ceil(element.Y + height)};
   };
 
   /**
    * Присваивает актуальные координаты исходному элементу разметки.
-   * @param {object} object - Исходный элемент разметки.
-   * @param {array} objectPos - Массив актуальных координат.
+   * @param {object} element - Исходный элемент разметки.
+   * @param {array} elementPos - Массив актуальных координат.
    */
-  const setPosition = (object, objectPos) => {
-    object.style.left = `${objectPos.X}px`;
-    object.style.top = `${objectPos.Y}px`;
+  const setPosition = (element, elementPos) => {
+    element.style.left = `${elementPos.X}px`;
+    element.style.top = `${elementPos.Y}px`;
   };
 
   /**
@@ -48,7 +60,7 @@
    * Очищаем карту от пинов.
    */
   const removePins = () => {
-    const allPins = window.map.allElements.querySelectorAll(`button:not(.map__pin--main):not(.popup__close)`);
+    const allPins = window.map.elementsParent.querySelectorAll(`button:not(.map__pin--main):not(.popup__close)`);
     allPins.forEach((element) => {
       element.remove();
     });
@@ -57,8 +69,9 @@
   window.pin = {
     fill: fillPin,
     remove: removePins,
-    calcLockPosition,
-    calcUnlockPosition,
-    setPosition,
+    set: setPosition,
+    calcReal: calcRealPos,
+    calcFakeCircle: calcFakePosForCircle,
+    calcFakePin: calcFakePosForPin
   };
 }());

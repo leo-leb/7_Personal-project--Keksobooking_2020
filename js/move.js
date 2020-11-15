@@ -30,9 +30,9 @@
       };
       let limitPos = {
         x: Math.round(actualPos.x + window.map.MainPinSizes.X / 2),
-        y: Math.round(actualPos.y)
+        y: Math.round(actualPos.y + window.map.MainPinSizes.Y2)
       };
-      if (X_MIN < limitPos.x && limitPos.x < X_MAX && Y_MIN < limitPos.y && limitPos.y < Y_MAX) {
+      if (X_MIN <= limitPos.x && limitPos.x <= X_MAX && Y_MIN <= limitPos.y && limitPos.y <= Y_MAX) {
         mainPin.style.top = actualPos.y + `px`;
         mainPin.style.left = actualPos.x + `px`;
         window.form.address.value = `${limitPos.x}, ${limitPos.y}`;
