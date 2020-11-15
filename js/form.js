@@ -34,7 +34,7 @@
   const resetButton = document.querySelector(`.ad-form__reset`);
 
   /**
-   * Устанавливаем лимит на допустимое количество мест в соответствии с количеством комнат жилья.
+   * Устанавливаем лимит на допустимое количество мест в соответствии с кол-вом комнат жилья.
    */
   const onGuestsLimit = () => {
     let selectedRoom = formRoom[formRoom.selectedIndex].value;
