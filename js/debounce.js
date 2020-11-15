@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  const DEBOUNCE_LIM = 5000;
+  const DEBOUNCE_LIM = 500;
 
   let lastTimeout;
 

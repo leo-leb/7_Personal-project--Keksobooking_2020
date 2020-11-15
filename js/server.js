@@ -12,9 +12,11 @@
   const getErrorMessage = (message) => {
     const infoWindow = document.createElement(`div`);
     infoWindow.textContent = message;
-    infoWindow.style.color = `red`;
-    infoWindow.style.padding = `10px`;
+    infoWindow.style = `z-index: 100; margin: 0 auto; text-align: center; background-color: red;`;
     infoWindow.style.position = `absolute`;
+    infoWindow.style.left = 0;
+    infoWindow.style.right = 0;
+    infoWindow.style.fontSize = `30px`;
     document.body.insertAdjacentElement(`beforebegin`, infoWindow);
   };
 

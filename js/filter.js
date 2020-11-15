@@ -66,10 +66,7 @@
   const filterHandler = () => {
     window.map.clear();
     let pinsOnMap = filterData(pinsLib);
-    window.debounce(window.map.fill(pinsOnMap, PINS_LIM));
-    // window.setTimeout(function () {
-    //   window.map.fill(pinsOnMap, PINS_LIM);
-    // }, 5000);
+    window.debounce(() => window.map.fill(pinsOnMap, PINS_LIM));
   };
 
   /**
