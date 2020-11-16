@@ -36,6 +36,18 @@ const avatarPreview = document.querySelector(`.ad-form-header__preview`);
 const adPhotoChoser = document.querySelector(`#images`);
 const adPhotoPreview = document.querySelector(`.ad-form__photo`);
 
+const checkV = function () {
+  const formReq = form.querySelectorAll(`fieldset input[required]`);
+  formReq.forEach(function (value) {
+    value.style = `box-shadow: 0 0 15px red`;
+    value.addEventListener(`input`, function () {
+      if (value.checkValidity()) {
+        value.style = `box-shadow: 0`;
+      }
+    });
+  });
+};
+
 /**
  * Устанавливаем лимит на допустимое количество мест в соответствии с кол-вом комнат жилья.
  */
@@ -151,7 +163,7 @@ const onMousePressInSuccess = (evt) => window.common.leftButtonEvt(evt, removeSu
 const removeSuccessWindow = () => {
   document.querySelector(`.success`).remove();
   document.removeEventListener(`keydown`, onEscPressInSuccess);
-  document.removeEventListener(`mousedown`, onEscPressInSuccess);
+  document.removeEventListener(`mousedown`, onMousePressInSuccess);
 };
 
 /**
@@ -177,15 +189,18 @@ const removeErrorWindow = () => {
 };
 
 /**
- * Вывод модального окна о неуспешном заполнении формы по нажатию на главную кнопку.
+ * Выводит окно со статусом ответа сервера при неудачной загрузке + модального окна о неуспешном заполнении формы по нажатию на главную кнопку.
+ * @param {string} message - Статус ответа сервера.
  */
-const getErrorWindow = () => {
-  if (form.checkValidity() === true) {
+const getErrorWindow = (message) => {
+  window.server.error(message);
+  if (form.checkValidity()) {
     window.common.create(newItemError, mainPlace);
     document.addEventListener(`keydown`, onEscPressInError);
     document.addEventListener(`mousedown`, onMousePressInError);
     errorButton.addEventListener(`mousedown`, onMousePressInError);
   } else {
+    checkV();
     form.reportValidity();
   }
 };

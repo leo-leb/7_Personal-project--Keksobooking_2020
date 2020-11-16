@@ -5,7 +5,7 @@ const ServerURL = {
   'download': `https://21.javascript.pages.academy/keksobooking/data`
 };
 
-const TIME_LIM = 1000;
+const TIME_LIM = 5000;
 const StatusCode = {
   OK: 200,
   requestError: 400,
@@ -14,8 +14,8 @@ const StatusCode = {
 };
 
 /**
- * Возвращает объект с расчитанными координатами элемента.
- * @param {string} message - Ширина элемента.
+ * Выводит окно со статусом ответа сервера при неудачной загрузке.
+ * @param {string} message - Статус ответа сервера.
  */
 const getErrorMessage = (message) => {
   const infoWindow = document.createElement(`div`);
@@ -44,16 +44,16 @@ const serverReader = (request, onSuccess, onError) => {
         onSuccess(request.response);
         break;
       case StatusCode.requestError:
-        error = `Неверный запрос`;
+        error = `Cтатус ответа: Неверный запрос`;
         break;
       case StatusCode.userError:
-        error = `Пользователь не авторизован`;
+        error = `Cтатус ответа: Пользователь не авторизован`;
         break;
       case StatusCode.dataError:
-        error = `Ничего не найдено`;
+        error = `Cтатус ответа: Ничего не найдено`;
         break;
       default:
-        error = `Cтатус ответа: : ` + request.status + ` ` + request.statusText;
+        error = `Cтатус ответа: ` + request.status + ` ` + request.statusText;
     }
     if (error) {
       onError(error);

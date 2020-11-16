@@ -4,8 +4,8 @@ module.exports = {
   entry: [
     "./js/common.js",
     "./js/debounce.js",
-    "./js/form.js",
     "./js/server.js",
+    "./js/form.js",
     "./js/pin.js",
     "./js/card.js",
     "./js/filter.js",

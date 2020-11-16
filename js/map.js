@@ -8,7 +8,7 @@ const MainPinSizes = {
 
 const map = document.querySelector(`.map`);
 const mapFilterParent = map.querySelector(`.map__filters`);
-const mapFilterChilds = mapFilterParent.querySelectorAll(`.map__filter`);
+const mapFilterChilds = mapFilterParent.children;
 const mapElementsParent = document.querySelector(`.map__pins`);
 const mainPin = mapElementsParent.querySelector(`.map__pin--main`);
 const mainPinRealPos = window.pin.calcReal(MainPinSizes.X, MainPinSizes.Y1);
@@ -29,7 +29,7 @@ const onPageLocking = () => {
   mapFilterParent.reset();
   map.classList.add(`map--faded`);
   window.form.parent.classList.add(`ad-form--disabled`);
-  mapFilterChilds.forEach((element) => element.setAttribute(`disabled`, true));
+  [].forEach.call(mapFilterChilds, (elem) => elem.setAttribute(`disabled`, true));
   window.form.childs.forEach((element) => element.setAttribute(`disabled`, true));
   window.pin.set(mainPin, mainPinRealPos);
   const mainPinFakePos = window.pin.calcFakeCircle(mainPinRealPos, MainPinSizes.X, MainPinSizes.Y1);
@@ -44,7 +44,7 @@ const onPageLocking = () => {
 const onPageUnlocking = () => {
   map.classList.remove(`map--faded`);
   window.form.parent.classList.remove(`ad-form--disabled`);
-  mapFilterChilds.forEach((element) => element.removeAttribute(`disabled`, true));
+  [].forEach.call(mapFilterChilds, (elem) => elem.removeAttribute(`disabled`, true));
   window.form.childs.forEach((element) => element.removeAttribute(`disabled`, true));
   const mainPinFakePos = window.pin.calcFakePin(mainPinRealPos, MainPinSizes.X, MainPinSizes.Y2);
   window.form.address.value = `${mainPinFakePos.X}, ${mainPinFakePos.Y}`;
