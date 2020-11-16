@@ -31,6 +31,11 @@ const newItemError = errorTemplate.querySelector(`.error`);
 const errorButton = document.querySelector(`.error__button`);
 const resetButton = document.querySelector(`.ad-form__reset`);
 
+const avatarChoser = document.querySelector(`.ad-form__field input[type=file]`);
+const avatarPreview = document.querySelector(`.ad-form-header__preview`);
+const adPhotoChoser = document.querySelector(`#images`);
+const adPhotoPreview = document.querySelector(`.ad-form__photo`);
+
 /**
  * Устанавливаем лимит на допустимое количество мест в соответствии с кол-вом комнат жилья.
  */
@@ -191,11 +196,29 @@ const onMousePressInReset = (evt) => window.common.enterEvt(evt, window.map.onPa
 resetButton.addEventListener(`keydown`, onEnterPressInReset);
 resetButton.addEventListener(`mousedown`, onMousePressInReset);
 
+/**
+ * Выбор аватара для объявления.
+ */
+const onAvatarChose = function () {
+  window.image.load(avatarChoser, avatarPreview);
+};
+
+/**
+ * Выбор фото для объявления.
+ */
+const onPhotoChose = function () {
+  window.image.load(adPhotoChoser, adPhotoPreview);
+};
+
 window.form = {
   parent: form,
   childs: formChilds,
   address: formAddress,
   title: formTitle,
+  avatarChoser,
+  adPhotoChoser,
   mainButtonPress: onMainButtonPress,
-  getError: getErrorWindow
+  getError: getErrorWindow,
+  onAvatarChose,
+  onPhotoChose
 };

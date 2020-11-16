@@ -16,6 +16,7 @@ const pinTemplate = document.querySelector(`#pin`).content;
 const newItemPin = pinTemplate.querySelector(`.map__pin`);
 const cardTemplate = document.querySelector(`#card`).content;
 const newItemCard = cardTemplate.querySelector(`.map__card`);
+
 const onMainPinEnterPress = (evt) => window.common.enterEvt(evt, onPageUnlocking);
 const onMainPinMousePress = (evt) => window.common.leftButtonEvt(evt, onPageUnlocking);
 
@@ -50,6 +51,8 @@ const onPageUnlocking = () => {
   window.server.download(window.server.url.download, window.filter.success, window.server.error);
   mainPin.removeEventListener(`mousedown`, onMainPinMousePress);
   mainPin.removeEventListener(`keydown`, onMainPinEnterPress);
+  window.form.avatarChoser.addEventListener(`change`, window.form.onAvatarChose);
+  window.form.adPhotoChoser.addEventListener(`change`, window.form.onPhotoChose);
 };
 
 /**
