@@ -71,10 +71,12 @@ const fillCard = (card, data) => {
   let photo = photos.querySelector(`.popup__photo`);
   if (data.offer.photos.length !== 0) {
     photo.src = `${data.offer.photos[0]}`;
+    let fragment = document.createDocumentFragment();
     for (let j = 1; j < data.offer.photos.length; j++) {
-      window.common.create(photo, photos);
+      window.common.create(photo, fragment);
       photo.src = `${data.offer.photos[j]}`;
     }
+    photos.appendChild(fragment);
   } else {
     photos.remove();
   }

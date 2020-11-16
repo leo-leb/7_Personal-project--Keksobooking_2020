@@ -192,8 +192,7 @@ const removeErrorWindow = () => {
  * Выводит окно со статусом ответа сервера при неудачной загрузке + модального окна о неуспешном заполнении формы по нажатию на главную кнопку.
  * @param {string} message - Статус ответа сервера.
  */
-const getErrorWindow = (message) => {
-  window.server.error(message);
+const getErrorWindow = () => {
   if (form.checkValidity()) {
     window.common.create(newItemError, mainPlace);
     document.addEventListener(`keydown`, onEscPressInError);
