@@ -1,101 +1,99 @@
 'use strict';
-(function () {
-  const URL = {
-    'load': `https://21.javascript.pages.academy/keksobooking`,
-    'download': `https://21.javascript.pages.academy/keksobooking/data`
-  };
 
-  const TIME_LIM = 1000;
+const ServerURL = {
+  'load': `https://21.javascript.pages.academy/keksobooking`,
+  'download': `https://21.javascript.pages.academy/keksobooking/data`
+};
 
-  const StatusCode = {
-    OK: 200,
-    requestError: 400,
-    userError: 401,
-    dataError: 404
-  };
+const TIME_LIM = 1000;
+const StatusCode = {
+  OK: 200,
+  requestError: 400,
+  userError: 401,
+  dataError: 404
+};
 
-  /**
-   * Возвращает объект с расчитанными координатами элемента.
-   * @param {string} message - Ширина элемента.
-   */
-  const getErrorMessage = (message) => {
-    const infoWindow = document.createElement(`div`);
-    infoWindow.textContent = message;
-    infoWindow.style = `z-index: 100; margin: 0 auto; text-align: center; background-color: red;`;
-    infoWindow.style.position = `absolute`;
-    infoWindow.style.left = 0;
-    infoWindow.style.right = 0;
-    infoWindow.style.fontSize = `30px`;
-    document.body.insertAdjacentElement(`beforebegin`, infoWindow);
-  };
+/**
+ * Возвращает объект с расчитанными координатами элемента.
+ * @param {string} message - Ширина элемента.
+ */
+const getErrorMessage = (message) => {
+  const infoWindow = document.createElement(`div`);
+  infoWindow.textContent = message;
+  infoWindow.style = `z-index: 100; margin: 0 auto; text-align: center; background-color: red;`;
+  infoWindow.style.position = `absolute`;
+  infoWindow.style.left = 0;
+  infoWindow.style.right = 0;
+  infoWindow.style.fontSize = `30px`;
+  document.body.insertAdjacentElement(`beforebegin`, infoWindow);
+};
 
-  /**
-   * Обработчик при загрузке данных с сервера.
-   * @param {*} request - Запрос к серверу.
-   * @param {function} onSuccess - Действие при успешной загрузке данных.
-   * @param {function} onError - Действие при неуспешной загрузке данных.
-   */
-  const serverReader = (request, onSuccess, onError) => {
-    request.responseType = `json`;
-    request.timeout = TIME_LIM;
-    request.addEventListener(`load`, () => {
-      let error;
-      switch (request.status) {
-        case StatusCode.OK:
-          onSuccess(request.response);
-          break;
-        case StatusCode.requestError:
-          error = `Неверный запрос`;
-          break;
-        case StatusCode.userError:
-          error = `Пользователь не авторизован`;
-          break;
-        case StatusCode.dataError:
-          error = `Ничего не найдено`;
-          break;
-        default:
-          error = `Cтатус ответа: : ` + request.status + ` ` + request.statusText;
-      }
-      if (error) {
-        onError(error);
-      }
-    });
-    request.addEventListener(`error`, () => onError(`Произошла ошибка соединения`));
-    request.addEventListener(`timeout`, () => onError(`Запрос не успел выполниться за ` + request.timeout + `мс`));
-  };
+/**
+ * Обработчик при загрузке данных с сервера.
+ * @param {*} request - Запрос к серверу.
+ * @param {function} onSuccess - Действие при успешной загрузке данных.
+ * @param {function} onError - Действие при неуспешной загрузке данных.
+ */
+const serverReader = (request, onSuccess, onError) => {
+  request.responseType = `json`;
+  request.timeout = TIME_LIM;
+  request.addEventListener(`load`, () => {
+    let error;
+    switch (request.status) {
+      case StatusCode.OK:
+        onSuccess(request.response);
+        break;
+      case StatusCode.requestError:
+        error = `Неверный запрос`;
+        break;
+      case StatusCode.userError:
+        error = `Пользователь не авторизован`;
+        break;
+      case StatusCode.dataError:
+        error = `Ничего не найдено`;
+        break;
+      default:
+        error = `Cтатус ответа: : ` + request.status + ` ` + request.statusText;
+    }
+    if (error) {
+      onError(error);
+    }
+  });
+  request.addEventListener(`error`, () => onError(`Произошла ошибка соединения`));
+  request.addEventListener(`timeout`, () => onError(`Запрос не успел выполниться за ` + request.timeout + `мс`));
+};
 
-  /**
-   * Загрузка данных с сервера.
-   * @param {*} url - Адрес сервера.
-   * @param {function} onSuccess - Действие при успешной загрузке данных.
-   * @param {function} onError - Действие при неуспешной загрузке данных.
-   */
-  const downloadFromServer = (url, onSuccess, onError) => {
-    let xhr = new XMLHttpRequest();
-    serverReader(xhr, onSuccess, onError);
-    xhr.open(`GET`, url);
-    xhr.send();
-  };
+/**
+ * Загрузка данных с сервера.
+ * @param {*} url - Адрес сервера.
+ * @param {function} onSuccess - Действие при успешной загрузке данных.
+ * @param {function} onError - Действие при неуспешной загрузке данных.
+ */
+const downloadFromServer = (url, onSuccess, onError) => {
+  let xhr = new XMLHttpRequest();
+  serverReader(xhr, onSuccess, onError);
+  xhr.open(`GET`, url);
+  xhr.send();
+};
 
-  /**
-   * Загрузка данных на сервер.
-   * @param {*} url - Адрес сервера.
-   * @param {function} onSuccess - Действие при успешной загрузке данных.
-   * @param {function} onError - Действие при неуспешной загрузке данных.
-   */
-  const loadToServer = (url, onSuccess, onError) => {
-    const form = document.querySelector(`.ad-form`);
-    const formData = new FormData(form);
-    let xhr = new XMLHttpRequest();
-    serverReader(xhr, onSuccess, onError);
-    xhr.open(`POST`, url);
-    xhr.send(formData);
-  };
+/**
+ * Загрузка данных на сервер.
+ * @param {*} url - Адрес сервера.
+ * @param {function} onSuccess - Действие при успешной загрузке данных.
+ * @param {function} onError - Действие при неуспешной загрузке данных.
+ */
+const loadToServer = (url, onSuccess, onError) => {
+  const form = document.querySelector(`.ad-form`);
+  const formData = new FormData(form);
+  let xhr = new XMLHttpRequest();
+  serverReader(xhr, onSuccess, onError);
+  xhr.open(`POST`, url);
+  xhr.send(formData);
+};
 
-  window.server = {
-    URL,
-    error: getErrorMessage,
-    download: downloadFromServer,
-    load: loadToServer
-  };
-}());
+window.server = {
+  url: ServerURL,
+  error: getErrorMessage,
+  download: downloadFromServer,
+  load: loadToServer
+};
