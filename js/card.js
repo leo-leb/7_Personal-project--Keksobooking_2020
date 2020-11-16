@@ -83,7 +83,7 @@ const fillCard = (card, data) => {
 };
 
 /**
- * Очищаем карту от карточек.
+ * Очищаем карту от карточек
  */
 const removeCards = () => {
   const allCards = window.map.elementsParent.querySelectorAll(`.map__card`);
