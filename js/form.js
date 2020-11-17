@@ -36,7 +36,7 @@ const avatarPreview = document.querySelector(`.ad-form-header__preview`);
 const adPhotoChoser = document.querySelector(`#images`);
 const adPhotoPreview = document.querySelector(`.ad-form__photo`);
 
-const checkV = function () {
+const showInvalidInputs = function () {
   const formReq = form.querySelectorAll(`fieldset input[required]`);
   formReq.forEach(function (value) {
     value.style = `box-shadow: 0 0 15px red`;
@@ -47,6 +47,18 @@ const checkV = function () {
     });
   });
 };
+
+const pressFormButton = function () {
+  if (window.form.parent.checkValidity()) {
+    window.server.load(window.server.url.load, getSuccessWindow, getErrorWindow);
+  } else {
+    showInvalidInputs();
+    form.reportValidity();
+  }
+};
+
+const onFormButtonPressEnter = (evt) => window.common.enterEvt(evt, pressFormButton);
+const onFormButtonPressLeftMouse = (evt) => window.common.leftButtonEvt(evt, pressFormButton);
 
 /**
  * Устанавливаем лимит на допустимое количество мест в соответствии с кол-вом комнат жилья.
@@ -169,7 +181,7 @@ const removeSuccessWindow = () => {
 /**
  * Вывод модального окна об успешном заполнении формы по нажатию на главную кнопку.
  */
-const onMainButtonPress = () => {
+const getSuccessWindow = () => {
   window.map.onPageLock();
   window.common.create(messageItem, mainPlace);
   document.addEventListener(`keydown`, onEscPressInSuccess);
@@ -193,15 +205,10 @@ const removeErrorWindow = () => {
  * @param {string} message - Статус ответа сервера.
  */
 const getErrorWindow = () => {
-  if (form.checkValidity()) {
-    window.common.create(newItemError, mainPlace);
-    document.addEventListener(`keydown`, onEscPressInError);
-    document.addEventListener(`mousedown`, onMousePressInError);
-    errorButton.addEventListener(`mousedown`, onMousePressInError);
-  } else {
-    checkV();
-    form.reportValidity();
-  }
+  window.common.create(newItemError, mainPlace);
+  document.addEventListener(`keydown`, onEscPressInError);
+  document.addEventListener(`mousedown`, onMousePressInError);
+  errorButton.addEventListener(`mousedown`, onMousePressInError);
 };
 
 const onEnterPressInReset = (evt) => window.common.leftButtonEvt(evt, window.map.onPageLock());
@@ -231,8 +238,9 @@ window.form = {
   title: formTitle,
   avatarChoser,
   adPhotoChoser,
-  mainButtonPress: onMainButtonPress,
-  getError: getErrorWindow,
+  showInvalid: showInvalidInputs,
+  onButtonPressEnter: onFormButtonPressEnter,
+  onButtonPressLeftMouse: onFormButtonPressLeftMouse,
   onAvatarChose,
   onPhotoChose
 };

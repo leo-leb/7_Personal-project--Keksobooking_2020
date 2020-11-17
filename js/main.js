@@ -8,9 +8,14 @@ const formButton = document.querySelector(`.ad-form__submit`);
 window.map.onPageLock();
 
 /**
+ * Обработчик на отмену действий формы по-умолчанию при попытке отправки.
+ */
+window.form.parent.addEventListener(`submit`, (evt) => {
+  evt.preventDefault();
+});
+
+/**
  * Обработчик на кнопку для отправки формы.
  */
-formButton.addEventListener(`click`, (evt) => {
-  evt.preventDefault();
-  window.server.load(window.server.url.load, window.form.mainButtonPress, window.form.getError);
-});
+formButton.addEventListener(`keydown`, window.form.onButtonPressEnter);
+formButton.addEventListener(`mousedown`, window.form.onButtonPressLeftMouse);
